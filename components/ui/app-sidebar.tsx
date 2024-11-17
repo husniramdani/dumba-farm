@@ -3,13 +3,15 @@
 import { SignOutButton, useClerk, useUser } from '@clerk/nextjs'
 import {
   Calendar,
+  ChartSpline,
   ChevronUp,
   Home,
-  Inbox,
   Search,
   Settings,
   User2,
 } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 import { Button } from './button'
 import {
@@ -34,14 +36,14 @@ import {
 // Menu items.
 const items = [
   {
-    title: 'Home',
-    url: '#',
-    icon: Home,
+    title: 'Dashboard',
+    url: '/admin/dashboard',
+    icon: ChartSpline,
   },
   {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
+    title: 'Ternak',
+    url: '/admin/ternak',
+    icon: Home,
   },
   {
     title: 'Calendar',
@@ -63,9 +65,13 @@ const items = [
 export function AppSidebar() {
   const { user } = useUser()
   const { openUserProfile } = useClerk()
+  const pathname = usePathname()
 
   const email = user?.primaryEmailAddress?.emailAddress || 'Admin'
 
+  const isActive = (url: string) => {
+    return pathname === url
+  }
   return (
     <Sidebar>
       <SidebarContent>
@@ -75,11 +81,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
