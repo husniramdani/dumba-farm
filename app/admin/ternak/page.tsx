@@ -1,27 +1,25 @@
-import { columns, Payment } from './columns'
+'use client'
+
+import { useQuery } from '@tanstack/react-query'
+
+import { columns, Ternak } from './columns'
 import { DataTable } from './data-table'
 
-async function getData(): Promise<Payment[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: '728ed52f',
-      amount: 1000000,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52k',
-      amount: 1000000,
-      status: 'pending',
-      email: 'a@kxample.com',
-    },
-    // ...
-  ]
+import { useFetch } from '@/lib/client-api'
+
+export function useTernak() {
+  const fetcher = useFetch()
+
+  return useQuery({
+    queryKey: ['ternak'],
+    queryFn: () => fetcher<Ternak[]>('/ternak'),
+  })
 }
 
-export default async function Page() {
-  const data = await getData()
+export default function Page() {
+  const { data = [], isLoading } = useTernak()
+
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <div>

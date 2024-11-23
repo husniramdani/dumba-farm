@@ -1,7 +1,6 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown } from 'lucide-react'
 import { MoreHorizontal } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -15,14 +14,18 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-export type Payment = {
-  id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
+export type Ternak = {
+  id: number
+  gender: string
+  age: number
+  breeds: string
+  status: string
+  qr: string
+  created_at: string
+  updated_at: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Ternak>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -44,54 +47,60 @@ export const columns: ColumnDef<Payment>[] = [
     ),
   },
   {
-    accessorKey: 'email',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    id: 'rowNumber',
+    header: () => <div>#</div>,
+    cell: ({ row }) => <div>{row.index + 1}</div>,
   },
   {
-    accessorKey: 'amount',
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount'))
-      const formatted = new Intl.NumberFormat('id', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
-    },
+    accessorKey: 'id',
+    header: () => <div>ID</div>,
+    cell: ({ row }) => <div>{row.getValue('id')}</div>,
+  },
+  {
+    accessorKey: 'gender',
+    header: () => <div>Gender</div>,
+    cell: ({ row }) => <div>{row.getValue('gender')}</div>,
+  },
+  {
+    accessorKey: 'age',
+    header: () => <div>Age</div>,
+    cell: ({ row }) => <div>{row.getValue('age')}</div>,
+  },
+  {
+    accessorKey: 'breeds',
+    header: () => <div>Breeds</div>,
+    cell: ({ row }) => <div>{row.getValue('breeds')}</div>,
+  },
+  {
+    accessorKey: 'status',
+    header: () => <div>Status</div>,
+    cell: ({ row }) => <div>{row.getValue('status')}</div>,
+  },
+  {
+    accessorKey: 'qr',
+    header: () => <div>QR Code</div>,
+    cell: ({ row }) => <div>{row.getValue('qr')}</div>,
+  },
+  {
+    accessorKey: 'created_at',
+    header: () => <div>Created At</div>,
+    cell: ({ row }) => (
+      <div>{new Date(row.getValue('created_at')).toLocaleString()}</div>
+    ),
   },
   {
     id: 'actions',
     cell: ({ row }) => {
-      const payment = row.original
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Open menu {row.id}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem>
