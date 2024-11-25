@@ -17,10 +17,10 @@ import {
 export type Ternak = {
   id: number
   gender: string
+  buy_price: number
   age: number
-  breeds: string
+  breed: string
   status: string
-  qr: string
   created_at: string
   updated_at: string
 }
@@ -63,13 +63,19 @@ export const columns: ColumnDef<Ternak>[] = [
   },
   {
     accessorKey: 'age',
-    header: () => <div>Age</div>,
+    header: () => <div>Umur (Bulan)</div>,
     cell: ({ row }) => <div>{row.getValue('age')}</div>,
   },
   {
-    accessorKey: 'breeds',
-    header: () => <div>Breeds</div>,
-    cell: ({ row }) => <div>{row.getValue('breeds')}</div>,
+    accessorKey: 'buy_price',
+    header: () => <div>Harga Beli</div>,
+    cell: ({ row }) => <div>{row.getValue('buy_price')}</div>,
+  },
+
+  {
+    accessorKey: 'breed',
+    header: () => <div>Jenis</div>,
+    cell: ({ row }) => <div>{row.getValue('breed')}</div>,
   },
   {
     accessorKey: 'status',
@@ -77,13 +83,8 @@ export const columns: ColumnDef<Ternak>[] = [
     cell: ({ row }) => <div>{row.getValue('status')}</div>,
   },
   {
-    accessorKey: 'qr',
-    header: () => <div>QR Code</div>,
-    cell: ({ row }) => <div>{row.getValue('qr')}</div>,
-  },
-  {
     accessorKey: 'created_at',
-    header: () => <div>Created At</div>,
+    header: () => <div>Tanggal Masuk</div>,
     cell: ({ row }) => (
       <div>{new Date(row.getValue('created_at')).toLocaleString()}</div>
     ),
