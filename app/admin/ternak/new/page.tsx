@@ -1,7 +1,9 @@
 'use client'
-
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner' // Assuming you're using sonner for notifications
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
@@ -22,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useFetch } from '@/lib/client-api'
 
 const formSchema = z.object({
   gender: z.enum(['MALE', 'FEMALE'], {
@@ -40,19 +43,47 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
+export function useCreateTernak() {
+  const fetcher = useFetch()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (data: FormValues) =>
+      fetcher('/ternak', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ternak'] })
+      toast.success('Ternak berhasil ditambahkan')
+    },
+    onError: (error) => {
+      toast.error('Gagal menambahkan ternak')
+      console.error('Error creating ternak:', error)
+    },
+  })
+}
+
 export default function Page() {
+  const router = useRouter()
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       gender: 'FEMALE',
-      age: 0,
+      age: undefined,
       buy_price: 0,
       breed: 'GARUT',
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  const { mutate, isPending } = useCreateTernak()
+
+  function onSubmit(values: FormValues) {
+    mutate(values, {
+      onSuccess: () => {
+        router.push('/admin/ternak') // Redirect back to list page after successful creation
+      },
+    })
   }
 
   return (
@@ -71,7 +102,7 @@ export default function Page() {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Pilih jeni kelamin" />
+                      <SelectValue placeholder="Pilih jenis kelamin" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -111,14 +142,14 @@ export default function Page() {
             name="breed"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Jenis Kelamin</FormLabel>
+                <FormLabel>Jenis Domba</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Pilih jeni domba" />
+                      <SelectValue placeholder="Pilih jenis domba" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -131,8 +162,9 @@ export default function Page() {
               </FormItem>
             )}
           />
-
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? 'Menyimpan...' : 'Submit'}
+          </Button>
         </form>
       </Form>
     </div>

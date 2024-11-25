@@ -52,11 +52,6 @@ export const columns: ColumnDef<Ternak>[] = [
     cell: ({ row }) => <div>{row.index + 1}</div>,
   },
   {
-    accessorKey: 'id',
-    header: () => <div>ID</div>,
-    cell: ({ row }) => <div>{row.getValue('id')}</div>,
-  },
-  {
     accessorKey: 'gender',
     header: () => <div>Gender</div>,
     cell: ({ row }) => <div>{row.getValue('gender')}</div>,
