@@ -1,8 +1,22 @@
 'use client'
 
-import { ColumnDef } from '@tanstack/react-table'
+import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ColumnDef, type Row } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
+import Link from 'next/link'
+import { toast } from 'sonner'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -13,19 +27,85 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useFetch } from '@/lib/client-api'
+import { Ternak } from '@/types/ternak'
 
-export type Ternak = {
-  id: number
-  gender: string
-  buy_price: number
-  age: number
-  breed: string
-  status: string
-  created_at: string
-  updated_at: string
+export function useDeleteTernak() {
+  const fetcher = useFetch()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (ternakId: string | number) =>
+      fetcher(`/ternak/${ternakId}`, {
+        method: 'DELETE',
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ternak'] })
+      toast.success('Ternak berhasil dihapus')
+    },
+    onError: (error) => {
+      toast.error('Gagal menghapus ternak')
+      console.error('Error deleting ternak:', error)
+    },
+  })
+}
+
+const ActionsCell = ({ row }: { row: Row<Ternak> }) => {
+  const deleteTernak = useDeleteTernak()
+  const ternakId = row.original.id
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+
+  const handleDelete = () => {
+    deleteTernak.mutate(ternakId)
+    setShowDeleteAlert(false)
+  }
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu {row.id}</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href={`/admin/ternak/${ternakId}`}>Ubah</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setShowDeleteAlert(true)}>
+            Hapus
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tindakan ini tidak dapat dibatalkan. Data ternak ini akan dihapus
+              secara permanen.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Hapus</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  )
 }
 
 export const columns: ColumnDef<Ternak>[] = [
+  {
+    id: 'rowNumber',
+    header: () => <div>#</div>,
+    cell: ({ row }) => <div>{row.index + 1}</div>,
+  },
   {
     id: 'select',
     header: ({ table }) => (
@@ -47,16 +127,6 @@ export const columns: ColumnDef<Ternak>[] = [
     ),
   },
   {
-    id: 'rowNumber',
-    header: () => <div>#</div>,
-    cell: ({ row }) => <div>{row.index + 1}</div>,
-  },
-  {
-    accessorKey: 'gender',
-    header: () => <div>Gender</div>,
-    cell: ({ row }) => <div>{row.getValue('gender')}</div>,
-  },
-  {
     accessorKey: 'age',
     header: () => <div>Umur (Bulan)</div>,
     cell: ({ row }) => <div>{row.getValue('age')}</div>,
@@ -73,6 +143,12 @@ export const columns: ColumnDef<Ternak>[] = [
     cell: ({ row }) => <div>{row.getValue('breed')}</div>,
   },
   {
+    accessorKey: 'gender',
+    header: () => <div>Gender</div>,
+    cell: ({ row }) => <div>{row.getValue('gender')}</div>,
+  },
+
+  {
     accessorKey: 'status',
     header: () => <div>Status</div>,
     cell: ({ row }) => <div>{row.getValue('status')}</div>,
@@ -86,23 +162,6 @@ export const columns: ColumnDef<Ternak>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu {row.id}</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
+    cell: ({ row }) => <ActionsCell row={row} />,
   },
 ]

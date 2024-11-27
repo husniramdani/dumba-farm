@@ -1,5 +1,4 @@
-'use client'
-import { useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { FieldValues, Path, UseFormReturn } from 'react-hook-form'
 
 import {
@@ -8,8 +7,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form'
-import { Input } from '../ui/input'
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
 interface TextInputProps<T extends FieldValues> {
   form: UseFormReturn<T>
@@ -31,21 +30,34 @@ export default function MoneyInput<T extends FieldValues>({
   label,
   placeholder,
 }: TextInputProps<T>) {
-  const initialValue = form.getValues()[name]
-    ? moneyFormatter.format(form.getValues()[name])
-    : ''
+  const formatValue = (val: number | string) => {
+    if (!val && val !== 0) return ''
+    return moneyFormatter.format(Number(val))
+  }
 
   const [value, setValue] = useReducer((_: string, next: string) => {
     const digits = next.replace(/\D/g, '')
-    return moneyFormatter.format(Number(digits))
-  }, initialValue)
+    return formatValue(digits)
+  }, formatValue(form.getValues()[name]))
+
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const newValue = values[name as keyof typeof values]
+      if (newValue !== undefined) {
+        setValue(String(newValue))
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [form, name])
 
   const handleChange = (
     realChangeFn: (value: number) => void,
     formattedValue: string,
   ) => {
     const digits = formattedValue.replace(/\D/g, '')
-    realChangeFn(Number(digits))
+    const numericValue = Number(digits)
+    realChangeFn(numericValue)
+    setValue(String(numericValue))
   }
 
   return (
@@ -61,7 +73,6 @@ export default function MoneyInput<T extends FieldValues>({
               type="text"
               {...field}
               onChange={(e) => {
-                setValue(e.target.value)
                 handleChange(field.onChange, e.target.value)
               }}
               value={value}

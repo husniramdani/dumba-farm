@@ -3,11 +3,12 @@
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 
-import { columns, Ternak } from './columns'
+import { columns } from './columns'
 import { DataTable } from './data-table'
 
 import { Button } from '@/components/ui/button'
 import { useFetch } from '@/lib/client-api'
+import { Ternak } from '@/types/ternak'
 
 export function useTernak() {
   const fetcher = useFetch()
