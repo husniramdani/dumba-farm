@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
@@ -62,7 +62,6 @@ export function useUpdateTernak(id: string | number) {
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter()
-  const [isDone, setIsDone] = useState(false)
 
   const { data, isLoading } = useTernakDetail(params.id)
 
@@ -74,7 +73,6 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     if (data) {
       form.reset(data)
-      setIsDone(true)
     }
   }, [data, form])
 
@@ -93,17 +91,13 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div>
       <Form {...form}>
-        <form
-          key={String(isDone)}
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="gender"
             render={({ field }) => {
               return (
-                <FormItem>
+                <FormItem key={field.value}>
                   <FormLabel>Jenis Kelamin</FormLabel>
                   <Select
                     name={field.name}
@@ -152,7 +146,7 @@ export default function Page({ params }: { params: { id: string } }) {
             control={form.control}
             name="breed"
             render={({ field }) => (
-              <FormItem>
+              <FormItem key={field.value}>
                 <FormLabel>Jenis Domba</FormLabel>
                 <Select
                   name={field.name}
