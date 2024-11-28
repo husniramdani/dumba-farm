@@ -3,3 +3,9 @@ export const breedOptions = [
   { value: 'LOKAL', label: 'Lokal' },
   { value: 'PRIANGAN', label: 'Priangan' },
 ]
+
+export const ternakStatusOptions = [
+  { value: 'AVAILABLE', label: 'Hidup' },
+  { value: 'SOLD', label: 'Terjual' },
+  { value: 'DEAD', label: 'Meninggal' },
+]
