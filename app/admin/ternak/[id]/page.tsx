@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import MoneyInput from '@/components/ui/money-input'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   Select,
   SelectContent,
@@ -95,29 +96,32 @@ export default function Page({ params }: { params: { id: string } }) {
           <FormField
             control={form.control}
             name="gender"
-            render={({ field }) => {
-              return (
-                <FormItem key={field.value}>
-                  <FormLabel>Jenis Kelamin</FormLabel>
-                  <Select
-                    name={field.name}
-                    value={field.value}
+            render={({ field }) => (
+              <FormItem key={field.value} className="space-y-3">
+                <FormLabel>Jenis Kelamin</FormLabel>
+                <FormControl>
+                  <RadioGroup
                     onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex space-x-4"
                   >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Pilih jenis kelamin"></SelectValue>
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="MALE">Jantan</SelectItem>
-                      <SelectItem value="FEMALE">Betina</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )
-            }}
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="MALE" />
+                      </FormControl>
+                      <FormLabel className="cursor-pointer">Jantan</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="FEMALE" />
+                      </FormControl>
+                      <FormLabel className="cursor-pointer">Betina</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
           <FormField
             control={form.control}

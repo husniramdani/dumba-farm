@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import MoneyInput from '@/components/ui/money-input'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   Select,
   SelectContent,
@@ -60,7 +61,7 @@ export default function Page() {
   function onSubmit(values: FormSchemaType) {
     mutate(values, {
       onSuccess: () => {
-        router.push('/admin/ternak') // Redirect back to list page after successful creation
+        router.push('/admin/ternak')
       },
     })
   }
@@ -72,19 +73,28 @@ export default function Page() {
           control={form.control}
           name="gender"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-3">
               <FormLabel>Jenis Kelamin</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih jenis kelamin" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="MALE">Laki-laki</SelectItem>
-                  <SelectItem value="FEMALE">Perempuan</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex space-x-4"
+                >
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="MALE" />
+                    </FormControl>
+                    <FormLabel className="cursor-pointer">Jantan</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="FEMALE" />
+                    </FormControl>
+                    <FormLabel className="cursor-pointer">Betina</FormLabel>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
