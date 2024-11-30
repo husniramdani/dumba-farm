@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { currencyIDR } from '@/constants/format'
 
 interface TextInputProps<T extends FieldValues> {
   form: UseFormReturn<T>
@@ -16,13 +17,6 @@ interface TextInputProps<T extends FieldValues> {
   label: string
   placeholder: string
 }
-
-const moneyFormatter = new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
-})
 
 export default function MoneyInput<T extends FieldValues>({
   form,
@@ -32,7 +26,7 @@ export default function MoneyInput<T extends FieldValues>({
 }: TextInputProps<T>) {
   const formatValue = (val: number | string) => {
     if (!val && val !== 0) return ''
-    return moneyFormatter.format(Number(val))
+    return currencyIDR.format(Number(val))
   }
 
   const [value, setValue] = useReducer((_: string, next: string) => {

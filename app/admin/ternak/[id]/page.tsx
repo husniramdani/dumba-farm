@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { breedOptions, ternakStatusOptions } from '@/constants/helpers'
+import { breedOptions, ternakStatusOptions } from '@/constants/options'
 import { useTernakDetail, useUpdateTernak } from '@/hooks/services/ternak'
 import { defaultValues, formSchema, FormSchemaType } from '@/schemas/ternak'
 

@@ -15,6 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -25,6 +26,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { dateFormat, genderFormat, statusFormat } from '@/constants/format'
+import { currencyIDR } from '@/constants/format'
 import { useDeleteTernak } from '@/hooks/services/ternak'
 import { Ternak } from '@/types/ternak'
 
@@ -78,6 +81,12 @@ const ActionsCell = ({ row }: { row: Row<Ternak> }) => {
   )
 }
 
+const convertVariant = (status: string) => {
+  if (status === 'AVAILABLE') return 'info'
+  if (status === 'SOLD') return 'success'
+  if (status === 'DEAD') return 'destructive'
+}
+
 export const columns: ColumnDef<Ternak>[] = [
   {
     id: 'rowNumber',
@@ -112,31 +121,43 @@ export const columns: ColumnDef<Ternak>[] = [
   {
     accessorKey: 'buy_price',
     header: () => <div>Harga Beli</div>,
-    cell: ({ row }) => <div>{row.getValue('buy_price')}</div>,
+    cell: ({ row }) => (
+      <div>{currencyIDR.format(row.getValue('buy_price'))}</div>
+    ),
   },
 
   {
     accessorKey: 'breed',
     header: () => <div>Jenis</div>,
-    cell: ({ row }) => <div>{row.getValue('breed')}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {String(row.getValue('breed')).toLowerCase()}
+      </div>
+    ),
   },
   {
     accessorKey: 'gender',
-    header: () => <div>Gender</div>,
-    cell: ({ row }) => <div>{row.getValue('gender')}</div>,
+    header: () => <div>Kelamin</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {genderFormat[String(row.getValue('gender'))]}
+      </div>
+    ),
   },
 
   {
     accessorKey: 'status',
     header: () => <div>Status</div>,
-    cell: ({ row }) => <div>{row.getValue('status')}</div>,
+    cell: ({ row }) => (
+      <Badge variant={convertVariant(row.getValue('status'))}>
+        {statusFormat[String(row.getValue('status'))]}
+      </Badge>
+    ),
   },
   {
     accessorKey: 'created_at',
     header: () => <div>Tanggal Masuk</div>,
-    cell: ({ row }) => (
-      <div>{new Date(row.getValue('created_at')).toLocaleString()}</div>
-    ),
+    cell: ({ row }) => <div>{dateFormat(row.getValue('created_at'))}</div>,
   },
   {
     id: 'actions',
