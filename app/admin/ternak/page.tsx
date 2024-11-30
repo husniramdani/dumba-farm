@@ -1,23 +1,12 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 
 import { columns } from './columns'
 import { DataTable } from './data-table'
 
 import { Button } from '@/components/ui/button'
-import { useFetch } from '@/lib/client-api'
-import { Ternak } from '@/types/ternak'
-
-export function useTernak() {
-  const fetcher = useFetch()
-
-  return useQuery({
-    queryKey: ['ternak'],
-    queryFn: () => fetcher<Ternak[]>('/ternak'),
-  })
-}
+import { useTernak } from '@/hooks/services/ternak'
 
 export default function Page() {
   const { data = [], isLoading } = useTernak()

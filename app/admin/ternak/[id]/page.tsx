@@ -2,10 +2,8 @@
 
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -27,49 +25,18 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { breedOptions, ternakStatusOptions } from '@/constants/helpers'
-import { useFetch } from '@/lib/client-api'
+import { useTernakDetail, useUpdateTernak } from '@/hooks/services/ternak'
 import { defaultValues, formSchema, FormSchemaType } from '@/schemas/ternak'
-import { Ternak } from '@/types/ternak'
-
-function useTernakDetail(id: string) {
-  const fetcher = useFetch()
-
-  return useQuery<Ternak>({
-    queryKey: ['ternak', id],
-    queryFn: async () => fetcher<Ternak>(`/ternak/${id}`),
-  })
-}
-
-export function useUpdateTernak(id: string | number) {
-  const fetcher = useFetch()
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: (data: FormSchemaType) =>
-      fetcher(`/ternak/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['ternak'] })
-      toast.success('Ternak berhasil diperbarui')
-    },
-    onError: (error) => {
-      toast.error('Gagal memperbarui ternak')
-      console.error('Error updating ternak:', error)
-    },
-  })
-}
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter()
-
-  const { data, isLoading } = useTernakDetail(params.id)
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues,
   })
+
+  const { data, isLoading } = useTernakDetail(params.id)
 
   useEffect(() => {
     if (data) {

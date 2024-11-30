@@ -1,10 +1,8 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -25,29 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useFetch } from '@/lib/client-api'
+import { useCreateTernak } from '@/hooks/services/ternak'
 import { defaultValues, formSchema, FormSchemaType } from '@/schemas/ternak'
-
-export function useCreateTernak() {
-  const fetcher = useFetch()
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: (data: FormSchemaType) =>
-      fetcher('/ternak', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['ternak'] })
-      toast.success('Ternak berhasil ditambahkan')
-    },
-    onError: (error) => {
-      toast.error('Gagal menambahkan ternak')
-      console.error('Error creating ternak:', error)
-    },
-  })
-}
 
 export default function Page() {
   const router = useRouter()
