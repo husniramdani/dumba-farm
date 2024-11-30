@@ -1,11 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ColumnDef, type Row } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
-import { toast } from 'sonner'
 
 import {
   AlertDialog,
@@ -27,28 +25,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useFetch } from '@/lib/client-api'
+import { useDeleteTernak } from '@/hooks/services/ternak'
 import { Ternak } from '@/types/ternak'
-
-export function useDeleteTernak() {
-  const fetcher = useFetch()
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: (ternakId: string | number) =>
-      fetcher(`/ternak/${ternakId}`, {
-        method: 'DELETE',
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['ternak'] })
-      toast.success('Ternak berhasil dihapus')
-    },
-    onError: (error) => {
-      toast.error('Gagal menghapus ternak')
-      console.error('Error deleting ternak:', error)
-    },
-  })
-}
 
 const ActionsCell = ({ row }: { row: Row<Ternak> }) => {
   const deleteTernak = useDeleteTernak()

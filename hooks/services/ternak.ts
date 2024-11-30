@@ -70,3 +70,23 @@ export function useUpdateTernak(id: string | number) {
 export function useCreateTernak() {
   return useBaseMutation('/ternak', 'POST')
 }
+
+export function useDeleteTernak() {
+  const fetcher = useFetch()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (ternakId: string | number) =>
+      fetcher(`/ternak/${ternakId}`, {
+        method: 'DELETE',
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ternak'] })
+      toast.success('Ternak berhasil dihapus')
+    },
+    onError: (error) => {
+      toast.error('Gagal menghapus ternak')
+      console.error('Error deleting ternak:', error)
+    },
+  })
+}
