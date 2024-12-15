@@ -38,7 +38,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { dateFormat, genderFormat, statusFormat } from '@/constants/format'
 import { currencyIDR } from '@/constants/format'
-import { useDeleteTernak } from '@/hooks/services/ternak'
+import { SelectTernak } from '@/db/ternak/schema'
+import { useDeleteTernak } from '@/services/ternak'
 import { Ternak } from '@/types/ternak'
 
 const convertVariant = (status: string) => {
@@ -47,7 +48,7 @@ const convertVariant = (status: string) => {
   if (status === 'DEAD') return 'destructive'
 }
 
-export const columns: ColumnDef<Ternak>[] = [
+export const columns: ColumnDef<SelectTernak>[] = [
   {
     id: 'rowNumber',
     header: () => <div>#</div>,
