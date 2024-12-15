@@ -36,7 +36,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { genderFormat, statusFormat } from '@/constants/format'
+import { dateFormat, genderFormat, statusFormat } from '@/constants/format'
 import { currencyIDR } from '@/constants/format'
 import { SelectTernak } from '@/db/ternak/schema'
 import { useDeleteTernak } from '@/services/ternak'
@@ -115,9 +115,9 @@ export const columns: ColumnDef<SelectTernak>[] = [
     ),
   },
   {
-    accessorKey: 'created_at',
+    accessorKey: 'createdAt',
     header: () => <div>Tanggal Masuk</div>,
-    cell: ({ row }) => <div>{row.getValue('createdAt')}</div>,
+    cell: ({ row }) => <div>{dateFormat(row.getValue('createdAt'))}</div>,
   },
   {
     id: 'qrcode',
