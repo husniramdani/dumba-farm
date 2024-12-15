@@ -26,13 +26,19 @@ export type SelectTernak = typeof ternakTable.$inferSelect
 
 // Form Schema
 
-export const formSchema = z.object({
-  gender: z.enum(GENDER).default('FEMALE'),
-  buyPrice: z.number().min(0, 'Harga harus lebih dari 0').default(0),
-  age: z.number().int().min(0, 'Umur harus lebih dari 0').default(0),
-  breed: z.enum(BREED),
-  status: z.enum(STATUS).default('AVAILABLE'),
-}).required()
+export const formSchema = z
+  .object({
+    gender: z.enum(GENDER).default('FEMALE'),
+    age: z.coerce.number().refine((val) => val > 0, {
+      message: 'Umur harus diisi',
+    }),
+    buyPrice: z.coerce.number().refine((val) => val > 0, {
+      message: 'Harga harus diisi',
+    }),
+    breed: z.enum(BREED),
+    status: z.enum(STATUS).default('AVAILABLE'),
+  })
+  .required()
 
 export type FormSchemaType = z.infer<typeof formSchema>
 
