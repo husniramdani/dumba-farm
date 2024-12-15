@@ -23,8 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useCreateTernak } from '@/hooks/services/ternak'
-import { defaultValues, formSchema, FormSchemaType } from '@/schemas/ternak'
+import { defaultValues, formSchema, FormSchemaType } from '@/db/ternak/schema'
+import { useCreateTernak } from '@/services/ternak'
 
 export default function Page() {
   const router = useRouter()
@@ -95,7 +95,7 @@ export default function Page() {
         />
         <MoneyInput
           form={form}
-          name="buy_price"
+          name="buyPrice"
           label="Harga beli"
           placeholder="Masukkan harga beli"
         />

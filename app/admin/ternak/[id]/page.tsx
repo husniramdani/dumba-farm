@@ -25,8 +25,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { breedOptions, ternakStatusOptions } from '@/constants/options'
-import { useTernakDetail, useUpdateTernak } from '@/hooks/services/ternak'
-import { defaultValues, formSchema, FormSchemaType } from '@/schemas/ternak'
+import { defaultValues, formSchema, FormSchemaType } from '@/db/ternak/schema'
+import { useTernakDetail, useUpdateTernak } from '@/services/ternak'
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter()
@@ -36,7 +36,7 @@ export default function Page({ params }: { params: { id: string } }) {
     defaultValues,
   })
 
-  const { data, isLoading } = useTernakDetail(params.id)
+  const { data, isLoading } = useTernakDetail(Number(params.id))
 
   useEffect(() => {
     if (data) {
@@ -44,7 +44,7 @@ export default function Page({ params }: { params: { id: string } }) {
     }
   }, [data, form])
 
-  const { mutate, isPending } = useUpdateTernak(params.id)
+  const { mutate, isPending } = useUpdateTernak(Number(params.id))
 
   function onSubmit(values: FormSchemaType) {
     mutate(values, {
@@ -109,7 +109,7 @@ export default function Page({ params }: { params: { id: string } }) {
           />
           <MoneyInput
             form={form}
-            name="buy_price"
+            name="buyPrice"
             label="Harga beli"
             placeholder="Masukkan harga beli"
           />

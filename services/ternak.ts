@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { SelectTernak } from '@/db/schema/ternak'
 import {
   createTernak,
   deleteTernak,
@@ -9,7 +8,7 @@ import {
   getTernakById,
   updateTernak,
 } from '@/db/ternak/action'
-import { FormSchemaType } from '@/schemas/ternak'
+import { FormSchemaType, SelectTernak } from '@/db/ternak/schema'
 
 const QUERY_KEY = 'ternak' as const
 

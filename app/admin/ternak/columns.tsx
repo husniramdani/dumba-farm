@@ -36,11 +36,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { dateFormat, genderFormat, statusFormat } from '@/constants/format'
+import { genderFormat, statusFormat } from '@/constants/format'
 import { currencyIDR } from '@/constants/format'
 import { SelectTernak } from '@/db/ternak/schema'
 import { useDeleteTernak } from '@/services/ternak'
-import { Ternak } from '@/types/ternak'
 
 const convertVariant = (status: string) => {
   if (status === 'AVAILABLE') return 'info'
@@ -80,10 +79,10 @@ export const columns: ColumnDef<SelectTernak>[] = [
     cell: ({ row }) => <div>{row.getValue('age')}</div>,
   },
   {
-    accessorKey: 'buy_price',
+    accessorKey: 'buyPrice',
     header: () => <div>Harga Beli</div>,
     cell: ({ row }) => (
-      <div>{currencyIDR.format(row.getValue('buy_price'))}</div>
+      <div>{currencyIDR.format(row.getValue('buyPrice'))}</div>
     ),
   },
 
@@ -118,7 +117,7 @@ export const columns: ColumnDef<SelectTernak>[] = [
   {
     accessorKey: 'created_at',
     header: () => <div>Tanggal Masuk</div>,
-    cell: ({ row }) => <div>{dateFormat(row.getValue('created_at'))}</div>,
+    cell: ({ row }) => <div>{row.getValue('createdAt')}</div>,
   },
   {
     id: 'qrcode',
@@ -131,7 +130,7 @@ export const columns: ColumnDef<SelectTernak>[] = [
   },
 ]
 
-const QRCodeModal = ({ row }: { row: Row<Ternak> }) => {
+const QRCodeModal = ({ row }: { row: Row<SelectTernak> }) => {
   const ternakId = row.original.id
   const [QRCodeURL, setQRCodeURL] = useState('')
   const baseUrl = `${window.location.protocol}//${window.location.host}`
@@ -184,7 +183,7 @@ const QRCodeModal = ({ row }: { row: Row<Ternak> }) => {
   )
 }
 
-const ActionsCell = ({ row }: { row: Row<Ternak> }) => {
+const ActionsCell = ({ row }: { row: Row<SelectTernak> }) => {
   const deleteTernak = useDeleteTernak()
   const ternakId = row.original.id
   const [showDeleteAlert, setShowDeleteAlert] = useState(false)
