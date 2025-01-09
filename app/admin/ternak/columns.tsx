@@ -38,8 +38,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { dateFormat, genderFormat, statusFormat } from '@/constants/format'
 import { currencyIDR } from '@/constants/format'
-import { useDeleteTernak } from '@/hooks/services/ternak'
-import { Ternak } from '@/types/ternak'
+import { SelectTernak } from '@/db/ternak/schema'
+import { useDeleteTernak } from '@/services/ternak'
 
 const convertVariant = (status: string) => {
   if (status === 'AVAILABLE') return 'info'
@@ -47,7 +47,7 @@ const convertVariant = (status: string) => {
   if (status === 'DEAD') return 'destructive'
 }
 
-export const columns: ColumnDef<Ternak>[] = [
+export const columns: ColumnDef<SelectTernak>[] = [
   {
     id: 'rowNumber',
     header: () => <div>#</div>,
@@ -79,10 +79,10 @@ export const columns: ColumnDef<Ternak>[] = [
     cell: ({ row }) => <div>{row.getValue('age')}</div>,
   },
   {
-    accessorKey: 'buy_price',
+    accessorKey: 'buyPrice',
     header: () => <div>Harga Beli</div>,
     cell: ({ row }) => (
-      <div>{currencyIDR.format(row.getValue('buy_price'))}</div>
+      <div>{currencyIDR.format(row.getValue('buyPrice'))}</div>
     ),
   },
 
@@ -115,9 +115,9 @@ export const columns: ColumnDef<Ternak>[] = [
     ),
   },
   {
-    accessorKey: 'created_at',
+    accessorKey: 'createdAt',
     header: () => <div>Tanggal Masuk</div>,
-    cell: ({ row }) => <div>{dateFormat(row.getValue('created_at'))}</div>,
+    cell: ({ row }) => <div>{dateFormat(row.getValue('createdAt'))}</div>,
   },
   {
     id: 'qrcode',
@@ -130,7 +130,7 @@ export const columns: ColumnDef<Ternak>[] = [
   },
 ]
 
-const QRCodeModal = ({ row }: { row: Row<Ternak> }) => {
+const QRCodeModal = ({ row }: { row: Row<SelectTernak> }) => {
   const ternakId = row.original.id
   const [QRCodeURL, setQRCodeURL] = useState('')
   const baseUrl = `${window.location.protocol}//${window.location.host}`
@@ -183,7 +183,7 @@ const QRCodeModal = ({ row }: { row: Row<Ternak> }) => {
   )
 }
 
-const ActionsCell = ({ row }: { row: Row<Ternak> }) => {
+const ActionsCell = ({ row }: { row: Row<SelectTernak> }) => {
   const deleteTernak = useDeleteTernak()
   const ternakId = row.original.id
   const [showDeleteAlert, setShowDeleteAlert] = useState(false)
