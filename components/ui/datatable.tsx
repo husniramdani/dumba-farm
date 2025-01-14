@@ -1,20 +1,14 @@
-'use client'
-
 import { useState } from 'react'
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
-  VisibilityState,
 } from '@tanstack/react-table'
 
-import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -22,21 +16,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '../ui/table'
+import { PaginationWithLinks } from './pagination-with-link'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  page: number
+  totalCount: number
+  paginateSize?: number
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  totalCount,
+  page,
+  paginateSize = 10,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
     data,
@@ -45,21 +43,17 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-
     state: {
       sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
+      pagination: {
+        pageSize: paginateSize,
+        pageIndex: 0,
+      },
     },
   })
 
   return (
-    <div className="mt-4">
+    <div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -110,23 +104,13 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+
+      <div className="py-4">
+        <PaginationWithLinks
+          page={page}
+          pageSize={paginateSize}
+          totalCount={totalCount}
+        />
       </div>
     </div>
   )

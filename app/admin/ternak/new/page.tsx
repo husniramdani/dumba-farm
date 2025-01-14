@@ -78,6 +78,24 @@ export default function Page() {
         />
         <FormField
           control={form.control}
+          name="weight"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Berat dalam kilogram</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Berat dalam kilogram"
+                  type="number"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="age"
           render={({ field }) => (
             <FormItem>

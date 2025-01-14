@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
   DialogContent,
@@ -39,6 +38,7 @@ import {
 import { dateFormat, genderFormat, statusFormat } from '@/constants/format'
 import { currencyIDR } from '@/constants/format'
 import { SelectTernak } from '@/db/ternak/schema'
+import { convertMonthsToYearsAndMonths } from '@/lib/utils'
 import { useDeleteTernak } from '@/services/ternak'
 
 const convertVariant = (status: string) => {
@@ -47,45 +47,33 @@ const convertVariant = (status: string) => {
   if (status === 'DEAD') return 'destructive'
 }
 
-export const columns: ColumnDef<SelectTernak>[] = [
+export const createColumns = (page: number, limit: number): ColumnDef<SelectTernak>[] => [
   {
     id: 'rowNumber',
-    header: () => <div>#</div>,
-    cell: ({ row }) => <div>{row.index + 1}</div>,
+    header: () => <div>No.</div>,
+    cell: ({ row }) => <div>{row.index + 1 + (page - 1) * limit}</div>,
   },
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-  },
-  {
-    accessorKey: 'age',
-    header: () => <div>Umur (Bulan)</div>,
-    cell: ({ row }) => <div>{row.getValue('age')}</div>,
-  },
-  {
-    accessorKey: 'buyPrice',
-    header: () => <div>Harga Beli</div>,
-    cell: ({ row }) => (
-      <div>{currencyIDR.format(row.getValue('buyPrice'))}</div>
-    ),
-  },
-
+  // SELECT CHECKBOX
+  // {
+  //   id: 'select',
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && 'indeterminate')
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  // },
   {
     accessorKey: 'breed',
     header: () => <div>Jenis</div>,
@@ -93,6 +81,32 @@ export const columns: ColumnDef<SelectTernak>[] = [
       <div className="capitalize">
         {String(row.getValue('breed')).toLowerCase()}
       </div>
+    ),
+  },
+  {
+    accessorKey: 'weight',
+    header: () => <div>Berat</div>,
+    cell: ({ row }) => (
+      <div>
+        {row.getValue('weight')} <span className="text-xs">kg</span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'buyPrice',
+    header: () => <div>Harga Beli</div>,
+    cell: ({ row }) => (
+      <div>
+        {currencyIDR.format(row.getValue('buyPrice'))}{' '}
+        <span className="text-xs">/kg</span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'age',
+    header: () => <div>Umur</div>,
+    cell: ({ row }) => (
+      <div>{convertMonthsToYearsAndMonths(row.getValue('age'))}</div>
     ),
   },
   {
@@ -104,7 +118,6 @@ export const columns: ColumnDef<SelectTernak>[] = [
       </div>
     ),
   },
-
   {
     accessorKey: 'status',
     header: () => <div>Status</div>,
