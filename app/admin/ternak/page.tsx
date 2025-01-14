@@ -2,23 +2,36 @@
 
 import Link from 'next/link'
 
-import { columns } from './columns'
-import { DataTable } from './data-table'
+import { createColumns } from './columns'
 
 import { Button } from '@/components/ui/button'
+import { DataTable } from '@/components/ui/datatable'
+import usePagination from '@/hooks/use-pagination'
 import { useTernak } from '@/services/ternak'
 
 export default function Page() {
-  const { data = [], isLoading } = useTernak()
+  const { page, limit } = usePagination()
+  const { data, isLoading } = useTernak({ page, limit })
 
-  if (isLoading) return <div>Loading...</div>
+  const columns = createColumns(page, limit)
+
+  if (isLoading || !data) return <div>Loading...</div>
 
   return (
     <div>
-      <Link href="/admin/ternak/new">
-        <Button>Tambah +</Button>
-      </Link>
-      <DataTable columns={columns} data={data} />
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Ternak</h1>
+        <Link href="/admin/ternak/new">
+          <Button>Tambah +</Button>
+        </Link>
+      </div>
+      <DataTable
+        columns={columns}
+        data={data.data}
+        page={data.currentPage}
+        totalCount={data.totalCount}
+        paginateSize={limit}
+      />
     </div>
   )
 }

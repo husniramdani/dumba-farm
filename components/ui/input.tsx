@@ -3,7 +3,20 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, value, onChange, ...props }, ref) => {
+    if (type === 'number' && value === 0) {
+      value = ''
+    }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (type === 'number') {
+        const value = e.target.value === '' ? 0 : Number(e.target.value)
+        onChange?.(Object.assign({}, e, { target: { ...e.target, value } }))
+        return
+      }
+      onChange?.(e)
+    }
+
     return (
       <input
         type={type}
@@ -12,6 +25,8 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
           className,
         )}
         ref={ref}
+        value={value}
+        onChange={handleChange}
         {...props}
       />
     )

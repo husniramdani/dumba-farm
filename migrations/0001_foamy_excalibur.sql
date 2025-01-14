@@ -1,0 +1,1 @@
+ALTER TABLE `ternak` ALTER COLUMN "weight" TO "weight" integer NOT NULL;

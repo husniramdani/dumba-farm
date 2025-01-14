@@ -5,6 +5,8 @@ import { asc, desc, eq } from 'drizzle-orm'
 import { db } from '../index'
 import { InsertTernak, SelectTernak, ternakTable } from './schema'
 
+import type { PaginatedResponse } from '@/types/model'
+
 export async function createTernak(data: InsertTernak) {
   const [newTernak] = await db.insert(ternakTable).values(data).returning()
   return newTernak
@@ -27,14 +29,24 @@ export type GetAllTernakParams = {
 
 export async function getAllTernak({
   page = 1,
-  limit = 5,
-}: GetAllTernakParams): Promise<Array<SelectTernak>> {
-  const baseQuery = db
+  limit = 10,
+}: GetAllTernakParams): Promise<PaginatedResponse<Array<SelectTernak>>> {
+  const data = await db
     .select()
     .from(ternakTable)
+    .limit(limit)
+    .offset((page - 1) * limit)
     .orderBy(desc(ternakTable.createdAt), asc(ternakTable.id))
 
-  return baseQuery.limit(limit).offset((page - 1) * limit)
+  const totalCount = await db.$count(ternakTable)
+  const totalPages = Math.ceil(totalCount / limit)
+
+  return {
+    data,
+    totalCount,
+    totalPages,
+    currentPage: page,
+  }
 }
 
 export async function updateTernak(

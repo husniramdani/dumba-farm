@@ -92,6 +92,24 @@ export default function Page({ params }: { params: { id: string } }) {
           />
           <FormField
             control={form.control}
+            name="weight"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Berat dalam kilogram</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Berat dalam kilogram"
+                    type="number"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="age"
             render={({ field }) => (
               <FormItem>
@@ -110,7 +128,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <MoneyInput
             form={form}
             name="buyPrice"
-            label="Harga beli"
+            label="Harga beli per kilogram"
             placeholder="Masukkan harga beli"
           />
           <FormField
