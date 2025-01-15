@@ -2,12 +2,11 @@
 
 import { SignOutButton, useClerk, useUser } from '@clerk/nextjs'
 import {
-  Calendar,
   ChartSpline,
   ChevronUp,
+  CircleDollarSign,
   Home,
   Search,
-  Settings,
   User2,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -46,19 +45,14 @@ const items = [
     icon: Home,
   },
   {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
+    title: 'Keuangan',
+    url: '/admin/keuangan',
+    icon: CircleDollarSign,
   },
   {
-    title: 'Search',
+    title: 'Harga Pasar',
     url: '#',
     icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
   },
 ]
 

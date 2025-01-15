@@ -3,12 +3,22 @@
 import { asc, desc, eq } from 'drizzle-orm'
 
 import { db } from '../index'
+import { createKeuangan } from '../keuangan/action'
 import { InsertTernak, SelectTernak, ternakTable } from './schema'
 
 import type { PaginatedResponse } from '@/types/model'
 
 export async function createTernak(data: InsertTernak) {
   const [newTernak] = await db.insert(ternakTable).values(data).returning()
+
+  // create pengeluaran
+  createKeuangan({
+    ternakId: newTernak.id,
+    type: 'EXPENSE',
+    category: 'TERNAK',
+    amount: newTernak.buyPrice,
+  })
+
   return newTernak
 }
 
@@ -58,6 +68,20 @@ export async function updateTernak(
     .set(data)
     .where(eq(ternakTable.id, id))
     .returning()
+
+  // current price dari hasil crawl terakhir
+  const currentPrice = 50000
+  // create pengeluaran
+  if (updated.status === 'SOLD') {
+    createKeuangan({
+      ternakId: id,
+      type: 'INCOME',
+      category: 'TERNAK',
+      amount: updated.weight * currentPrice,
+    })
+    console.log('updated', updated)
+  }
+
   return updated
 }
 

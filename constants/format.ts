@@ -16,6 +16,11 @@ export const statusFormat = {
   SOLD: 'Terjual',
 }
 
+export const transactionTypeFormat = {
+  EXPENSE: 'Pengeluaran',
+  INCOME: 'Pemasukan',
+}
+
 export function dateFormat(value) {
   const date = new Date(value)
   const formatter = new Intl.DateTimeFormat('id-ID', {

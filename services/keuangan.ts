@@ -2,57 +2,57 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import {
-  createTernak,
-  deleteTernak,
-  getAllTernak,
-  getTernakById,
-  updateTernak,
-} from '@/db/ternak/action'
-import { FormSchemaType, SelectTernak } from '@/db/ternak/schema'
+  createKeuangan,
+  deleteKeuangan,
+  getAllKeuangan,
+  getKeuanganById,
+  updateKeuangan,
+} from '@/db/keuangan/action'
+import { FormSchemaType, SelectKeuangan } from '@/db/keuangan/schema'
 import { PaginationParams } from '@/types/model'
 
-const QUERY_KEY = 'ternak' as const
+const QUERY_KEY = 'keuangan' as const
 
-export function useTernak(params: PaginationParams = {}) {
+export function useKeuangan(params: PaginationParams = {}) {
   return useQuery({
     queryKey: [QUERY_KEY, params],
-    queryFn: () => getAllTernak(params),
+    queryFn: () => getAllKeuangan(params),
   })
 }
 
-export function useTernakDetail(id: number) {
+export function useKeuanganDetail(id: number) {
   return useQuery({
     queryKey: [QUERY_KEY, id],
-    queryFn: () => getTernakById(id),
+    queryFn: () => getKeuanganById(id),
   })
 }
 
-export function useCreateTernak() {
+export function useCreateKeuangan() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: FormSchemaType) => createTernak(data),
+    mutationFn: (data: FormSchemaType) => createKeuangan(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
-      toast.success('Ternak berhasil ditambahkan')
+      toast.success('Transaksi berhasil ditambahkan')
     },
     onError: (error) => {
-      toast.error('Gagal menambahkan ternak')
-      console.error('Error creating ternak:', error)
+      toast.error('Gagal menambahkan transaksi')
+      console.error('Error creating transaction:', error)
     },
   })
 }
 
-export function useUpdateTernak(id: number) {
+export function useUpdateKeuangan(id: number) {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (
-      data: Partial<Omit<SelectTernak, 'id' | 'createdAt' | 'updatedAt'>>,
-    ) => updateTernak(id, data),
+      data: Partial<Omit<SelectKeuangan, 'id' | 'createdAt' | 'updatedAt'>>,
+    ) => updateKeuangan(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
-      toast.success('Ternak berhasil diperbarui')
+      toast.success('Transaksi berhasil diperbarui')
     },
     onError: (error) => {
       toast.error('Gagal memperbarui ternak')
@@ -61,14 +61,14 @@ export function useUpdateTernak(id: number) {
   })
 }
 
-export function useDeleteTernak() {
+export function useDeleteKeuangan() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (ternakId: number) => deleteTernak(ternakId),
+    mutationFn: (id: number) => deleteKeuangan(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
-      toast.success('Ternak berhasil dihapus')
+      toast.success('Transaksi berhasil dihapus')
     },
     onError: (error) => {
       toast.error('Gagal menghapus ternak')

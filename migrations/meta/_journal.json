@@ -15,6 +15,27 @@
       "when": 1736838131205,
       "tag": "0001_foamy_excalibur",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1736950687835,
+      "tag": "0002_fat_kingpin",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1736964688555,
+      "tag": "0003_smiling_black_bolt",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1736964812099,
+      "tag": "0004_absent_eternals",
+      "breakpoints": true
     }
   ]
 }
