@@ -31,8 +31,8 @@ import { SelectKeuangan } from '@/db/keuangan/schema'
 import { useDeleteKeuangan } from '@/services/keuangan'
 
 const convertVariant = (type: string) => {
-  if (type === 'EXPENSE') return 'destructive'
-  if (type === 'INCOME') return 'success'
+  if (type === 'EXPENSE') return 'destructiveOutline'
+  if (type === 'INCOME') return 'successOutline'
 }
 
 export const createColumns = (
@@ -68,12 +68,7 @@ export const createColumns = (
   {
     accessorKey: 'amount',
     header: () => <div>Jumlah</div>,
-    cell: ({ row }) => (
-      <div>
-        {currencyIDR.format(row.getValue('amount'))}{' '}
-        <span className="text-xs">/kg</span>
-      </div>
-    ),
+    cell: ({ row }) => <div>{currencyIDR.format(row.getValue('amount'))} </div>,
   },
   {
     accessorKey: 'createdAt',

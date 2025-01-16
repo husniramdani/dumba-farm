@@ -6,6 +6,7 @@ import {
   deleteTernak,
   getAllTernak,
   getTernakById,
+  jualTernak,
   updateTernak,
 } from '@/db/ternak/action'
 import { FormSchemaType, SelectTernak } from '@/db/ternak/schema'
@@ -73,6 +74,23 @@ export function useDeleteTernak() {
     onError: (error) => {
       toast.error('Gagal menghapus ternak')
       console.error('Error deleting ternak:', error)
+    },
+  })
+}
+
+export function useJualTernak() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, price }: { id: number; price?: number }) =>
+      jualTernak(id, price),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      toast.success('Ternak berhasil dijual')
+    },
+    onError: (error) => {
+      toast.error('Gagal memperbarui ternak')
+      console.error('Error updating ternak:', error)
     },
   })
 }

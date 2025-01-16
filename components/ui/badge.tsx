@@ -27,6 +27,8 @@ const badgeVariants = cva(
           'border-yellow-500 text-yellow-500 bg-transparent hover:bg-yellow-50',
         infoOutline:
           'border-blue-500 text-blue-500 bg-transparent hover:bg-blue-50',
+        destructiveOutline:
+          'border-red-500 text-red-500 bg-transparent hover:bg-red-50',
       },
     },
     defaultVariants: {

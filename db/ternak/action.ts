@@ -70,17 +70,17 @@ export async function updateTernak(
     .returning()
 
   // current price dari hasil crawl terakhir
-  const currentPrice = 50000
+  // const currentPrice = 50000
   // create pengeluaran
-  if (updated.status === 'SOLD') {
-    createKeuangan({
-      ternakId: id,
-      type: 'INCOME',
-      category: 'TERNAK',
-      amount: updated.weight * currentPrice,
-    })
-    console.log('updated', updated)
-  }
+  // if (updated.status === 'SOLD') {
+  //   createKeuangan({
+  //     ternakId: id,
+  //     type: 'INCOME',
+  //     category: 'TERNAK',
+  //     amount: updated.weight * currentPrice,
+  //   })
+  //   console.log('updated', updated)
+  // }
 
   return updated
 }
@@ -91,4 +91,24 @@ export async function deleteTernak(id: SelectTernak['id']) {
     .where(eq(ternakTable.id, id))
     .returning()
   return deleted
+}
+
+export async function jualTernak(id: SelectTernak['id'], price?: number) {
+  const [ternak] = await db
+    .update(ternakTable)
+    .set({ status: 'SOLD' })
+    .where(eq(ternakTable.id, id))
+    .returning()
+
+  // current price dari hasil crawl terakhir
+  const currentPrice = 50000
+  // create pengeluaran
+  createKeuangan({
+    ternakId: id,
+    type: 'INCOME',
+    category: 'TERNAK',
+    amount: price || ternak.weight * currentPrice,
+  })
+
+  return ternak
 }
