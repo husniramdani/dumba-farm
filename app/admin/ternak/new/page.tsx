@@ -114,7 +114,7 @@ export default function Page() {
         <MoneyInput
           form={form}
           name="buyPrice"
-          label="Harga beli"
+          label="Harga beli per kilogram"
           placeholder="Masukkan harga beli"
         />
         <FormField

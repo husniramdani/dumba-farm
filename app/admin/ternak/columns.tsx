@@ -50,7 +50,7 @@ export const createColumns = (
     cell: ({ row }) => (
       <div>
         {currencyIDR.format(row.getValue('buyPrice'))}{' '}
-        {/* <span className="text-xs">/kg</span> */}
+        <span className="text-xs">/kg</span>
       </div>
     ),
   },

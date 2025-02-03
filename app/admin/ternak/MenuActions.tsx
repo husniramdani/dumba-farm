@@ -87,7 +87,7 @@ export const MenuActions = ({ row }: { row: Row<SelectTernak> }) => {
               Harga Jual (opsional)
             </Label>
             <MoneyInputBase
-              placeholder="Harga Jual"
+              placeholder="Harga jual per kilogram"
               value={hargaJual}
               onChange={setHargaJual}
             />
