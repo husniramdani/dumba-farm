@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card'
 import { DatePickerWithRange } from '@/components/ui/date-range-picker'
 
-export default function DashboardPage() {
+export default function Page() {
   return (
     <div className="flex flex-col">
       <div className="border-b"></div>

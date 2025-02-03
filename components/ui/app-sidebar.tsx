@@ -51,7 +51,7 @@ const items = [
   },
   {
     title: 'Harga Pasar',
-    url: '#',
+    url: '/admin/market',
     icon: Search,
   },
 ]
