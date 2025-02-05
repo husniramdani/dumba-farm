@@ -2,6 +2,9 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { NextResponse } from 'next/server'
 
+import { db } from '@/db'
+import { marketPriceTable } from '@/db/market-price/schema'
+
 export async function GET() {
   try {
     console.log(
@@ -13,24 +16,30 @@ export async function GET() {
     const html = response.data
     const $ = cheerio.load(html)
 
-    // Find the row containing "Domba"
     const dombaRow = $('table tbody tr').filter((_, element) => {
       return $(element).find('td').first().text().includes('Domba')
     })
 
-    // Extract the last date and price for "Domba" from the table
     const dateColumns = $('table thead th')
       .toArray()
       .map((th) => $(th).text().trim())
-    const lastDate = dateColumns[dateColumns.length - 3] // Date for 01/02/2025
+
+    const lastDate = dateColumns[dateColumns.length - 3]
+
     const priceText = dombaRow
       .find('td')
       .eq(dateColumns.length - 3)
       .text()
-      .trim() // Price for 01/02/2025
-    const price = Number(priceText.replace(/[Rp.,\s]/g, ''))
+      .trim()
 
-    console.log('Fetched Data:', { price, lastDate }) // Logging fetched data for debugging
+    const numericString = priceText.replace(/[^\d]/g, '')
+    const price = Number(numericString)
+
+    console.log('Fetched Data', { price, lastDate })
+
+    const marketPriceData = { price, date: lastDate, source: 'Simponi Ternak' }
+
+    await db.insert(marketPriceTable).values(marketPriceData).returning()
 
     return NextResponse.json({
       price,
@@ -38,7 +47,7 @@ export async function GET() {
       source: 'Simponi Ternak',
     })
   } catch (error) {
-    console.error('Error fetching lamb price:', error)
+    console.error('Error fetching lamb price', error)
     return NextResponse.json(
       { error: 'Gagal mengambil data harga daging domba' },
       { status: 500 },

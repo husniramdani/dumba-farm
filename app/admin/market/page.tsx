@@ -19,7 +19,7 @@ export default function Page() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/scrapping')
+      const response = await fetch('/api/wedoes')
       const result = await response.json()
 
       if (response.ok) {
@@ -38,7 +38,7 @@ export default function Page() {
     fetchData()
   }, [])
 
-  if (isLoading || !data) return <div>Loading...</div>
+  if (isLoading) return <div>Loading...</div>
 
   if (error) {
     return (
@@ -49,8 +49,6 @@ export default function Page() {
       </Card>
     )
   }
-
-  console.log('DATA', data)
 
   return (
     <Card>
