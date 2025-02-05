@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { RefreshCcw } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface HargaDomba {
@@ -15,24 +17,24 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/scrapping')
-        const result = await response.json()
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/scrapping')
+      const result = await response.json()
 
-        if (response.ok) {
-          setData(result)
-        } else {
-          setError(result.error || 'Unknown error')
-        }
-      } catch (err) {
-        console.error('Error fetching data from server', err)
-      } finally {
-        setIsLoading(false)
+      if (response.ok) {
+        setData(result)
+      } else {
+        setError(result.error || 'Unknown error')
       }
+    } catch (err) {
+      console.error('Error fetching data from server', err)
+    } finally {
+      setIsLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchData()
   }, [])
 
@@ -48,14 +50,17 @@ export default function Page() {
     )
   }
 
-  console.log(data)
+  console.log('DATA', data)
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="relative">
         <CardTitle className="text-sm font-medium">
           Harga Daging Domba
         </CardTitle>
+        <Button onClick={() => fetchData()} className="absolute top-5 right-5">
+          <RefreshCcw />
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">
