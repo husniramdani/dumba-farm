@@ -19,7 +19,7 @@ export default function Page() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/wedoes')
+      const response = await fetch('/api/scrapping')
       const result = await response.json()
 
       if (response.ok) {

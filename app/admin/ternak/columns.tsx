@@ -9,13 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { dateFormat, genderFormat, statusFormat } from '@/constants/format'
 import { currencyIDR } from '@/constants/format'
 import { SelectTernak } from '@/db/ternak/schema'
-import { convertMonthsToYearsAndMonths } from '@/lib/utils'
-
-const convertVariant = (status: string) => {
-  if (status === 'AVAILABLE') return 'info'
-  if (status === 'SOLD') return 'success'
-  if (status === 'DEAD') return 'destructive'
-}
+import { convertMonthsToYearsAndMonths, convertVariant } from '@/lib/utils'
 
 export const createColumns = (
   page: number,

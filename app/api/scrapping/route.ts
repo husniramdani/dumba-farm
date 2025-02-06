@@ -2,8 +2,8 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { NextResponse } from 'next/server'
 
-import { db } from '@/db'
-import { marketPriceTable } from '@/db/market-price/schema'
+// import { db } from '@/db'
+// import { marketPriceTable } from '@/db/market-price/schema'
 
 export async function GET() {
   try {
@@ -39,13 +39,9 @@ export async function GET() {
 
     const marketPriceData = { price, date: lastDate, source: 'Simponi Ternak' }
 
-    await db.insert(marketPriceTable).values(marketPriceData).returning()
+    // await db.insert(marketPriceTable).values(marketPriceData).returning()
 
-    return NextResponse.json({
-      price,
-      date: lastDate,
-      source: 'Simponi Ternak',
-    })
+    return NextResponse.json(marketPriceData)
   } catch (error) {
     console.error('Error fetching lamb price', error)
     return NextResponse.json(

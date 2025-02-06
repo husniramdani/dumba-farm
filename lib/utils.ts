@@ -11,13 +11,18 @@ export const selectDisplayText = (value, options) => {
 }
 
 export const convertMonthsToYearsAndMonths = (months: number): string => {
-  const years = Math.floor(months / 12);
-  const remainingMonths = months % 12;
+  const years = Math.floor(months / 12)
+  const remainingMonths = months % 12
 
-  const yearText = years > 0 ? `${years} Tahun` : '';
-  const monthText = remainingMonths > 0 ? `${remainingMonths} Bulan` : '';
+  const yearText = years > 0 ? `${years} Tahun` : ''
+  const monthText = remainingMonths > 0 ? `${remainingMonths} Bulan` : ''
 
   // Combine the results, ensuring proper spacing
-  return [yearText, monthText].filter(Boolean).join(' ').trim();
+  return [yearText, monthText].filter(Boolean).join(' ').trim()
 }
 
+export const convertVariant = (status: string) => {
+  if (status === 'AVAILABLE') return 'infoOutline'
+  if (status === 'SOLD') return 'successOutline'
+  if (status === 'DEAD') return 'destructiveOutline'
+}
