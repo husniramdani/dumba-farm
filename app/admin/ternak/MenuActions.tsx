@@ -3,6 +3,8 @@ import { type Row } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
 
+import { ModalJual } from './ModalJual'
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,10 +24,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Label } from '@/components/ui/label'
-import MoneyInputBase from '@/components/ui/money-input-base'
 import { SelectTernak } from '@/db/ternak/schema'
-import { useDeleteTernak, useJualTernak } from '@/services/ternak'
+import { useDeleteTernak } from '@/services/ternak'
 
 export const MenuActions = ({ row }: { row: Row<SelectTernak> }) => {
   const ternakId = row.original.id
@@ -33,17 +33,10 @@ export const MenuActions = ({ row }: { row: Row<SelectTernak> }) => {
 
   const [showDeleteAlert, setShowDeleteAlert] = useState(false)
   const [showJualAlert, setShowJualAlert] = useState(false)
-  const [hargaJual, setHargaJual] = useState(0)
 
   const deleteTernak = useDeleteTernak()
   const handleDelete = () => {
     deleteTernak.mutate(ternakId)
-    setShowDeleteAlert(false)
-  }
-
-  const jualTernak = useJualTernak()
-  const handleJual = () => {
-    jualTernak.mutate({ id: ternakId, price: hargaJual })
     setShowDeleteAlert(false)
   }
 
@@ -76,32 +69,11 @@ export const MenuActions = ({ row }: { row: Row<SelectTernak> }) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <AlertDialog open={showJualAlert} onOpenChange={setShowJualAlert}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tindakan ini tidak dapat dibatalkan. Ternak akan berubah menjadi
-              terjual dan tidak dapat dirubah lagi.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div>
-            <Label className="text-sm mb-5 text-blue-600">
-              Harga Jual (opsional)
-            </Label>
-            <MoneyInputBase
-              placeholder="Harga jual per kilogram"
-              value={hargaJual}
-              onChange={setHargaJual}
-            />
-          </div>
-
-          <AlertDialogFooter>
-            <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction onClick={handleJual}>Jual</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ModalJual
+        ternakId={ternakId}
+        showJualAlert={showJualAlert}
+        setShowJualAlert={setShowJualAlert}
+      />
 
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>

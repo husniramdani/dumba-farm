@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { History } from 'lucide-react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
+import { ModalJual } from '../../ModalJual'
 import HistoryCard from './historyCard'
 
 import { Button } from '@/components/ui/button'
@@ -23,6 +24,7 @@ export default function Page({ params }: { params: { id: string } }) {
   })
 
   const { data, isLoading } = useTernakDetail(Number(params.id))
+  const [showJualAlert, setShowJualAlert] = useState(false)
 
   useEffect(() => {
     if (data) {
@@ -90,7 +92,12 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
           </div>
           {status === 'AVAILABLE' && (
-            <Button className="w-full mt-5">Jual</Button>
+            <Button
+              className="w-full mt-5"
+              onClick={() => setShowJualAlert(true)}
+            >
+              Jual
+            </Button>
           )}
         </CardContent>
       </Card>
@@ -106,6 +113,12 @@ export default function Page({ params }: { params: { id: string } }) {
           <HistoryCard />
         </CardContent>
       </Card>
+
+      <ModalJual
+        ternakId={params.id}
+        showJualAlert={showJualAlert}
+        setShowJualAlert={setShowJualAlert}
+      />
     </div>
   )
 }
