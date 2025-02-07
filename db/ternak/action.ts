@@ -2,6 +2,7 @@
 
 import { asc, desc, eq } from 'drizzle-orm'
 
+import { createHistoryTernak } from '../history/action'
 import { db } from '../index'
 import { createKeuangan } from '../keuangan/action'
 import { InsertTernak, SelectTernak, ternakTable } from './schema'
@@ -17,6 +18,12 @@ export async function createTernak(data: InsertTernak) {
     type: 'EXPENSE',
     category: 'TERNAK',
     amount: newTernak.buyPrice,
+  })
+
+  // Init first ternak weight
+  createHistoryTernak({
+    ternakId: newTernak.id,
+    weight: newTernak.weight,
   })
 
   return newTernak

@@ -59,6 +59,9 @@ export const MenuActions = ({ row }: { row: Row<SelectTernak> }) => {
           <DropdownMenuLabel>Aksi</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
+            <Link href={`/admin/ternak/detail/${ternakId}`}>Detail</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
             <Link href={`/admin/ternak/${ternakId}`}>Ubah</Link>
           </DropdownMenuItem>
           <DropdownMenuItem

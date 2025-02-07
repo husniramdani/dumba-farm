@@ -12,6 +12,9 @@ export const keuanganTable = sqliteTable('keuangan', {
   id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   ternakId: integer('ternak_id', { mode: 'number' }).references(
     () => ternakTable.id,
+    {
+      onDelete: 'cascade',
+    },
   ),
   type: text('type', { enum: TRANSACTION_TYPE }).notNull(),
   category: text('category', { enum: TRANSACTION_CATEGORY }).notNull(),

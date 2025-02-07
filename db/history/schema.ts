@@ -8,7 +8,9 @@ import { ternakTable } from '../ternak/schema'
 export const historyTernakTable = sqliteTable('history_ternak', {
   id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   ternakId: integer('ternak_id', { mode: 'number' })
-    .references(() => ternakTable.id)
+    .references(() => ternakTable.id, {
+      onDelete: 'cascade',
+    })
     .notNull(),
   weight: integer('weight', { mode: 'number' }).notNull(),
   notes: text('notes'),

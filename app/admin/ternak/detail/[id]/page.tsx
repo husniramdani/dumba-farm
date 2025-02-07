@@ -3,21 +3,17 @@
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { History } from 'lucide-react'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
-import { Badge } from '@/components/ui/badge'
+import HistoryCard from './historyCard'
+
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { genderFormat, statusFormat } from '@/constants/format'
+import { currencyIDR, genderFormat, statusFormat } from '@/constants/format'
 import { defaultValues, formSchema, FormSchemaType } from '@/db/ternak/schema'
-import { convertMonthsToYearsAndMonths, convertVariant } from '@/lib/utils'
+import { convertMonthsToYearsAndMonths } from '@/lib/utils'
 import { useTernakDetail } from '@/services/ternak'
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -41,6 +37,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const breed = form.getValues('breed').toLowerCase()
   const age = form.getValues('age')
   const weight = form.getValues('weight')
+  const buyPrice = form.getValues('buyPrice')
 
   return (
     <div className="space-y-5">
@@ -48,14 +45,17 @@ export default function Page({ params }: { params: { id: string } }) {
         <CardHeader className="flex flex-row justify-between items-center">
           <div className="space-y-2">
             <CardTitle>Detail Domba</CardTitle>
-            <CardDescription>
-              Status:
-              <Badge className="ml-2" variant={convertVariant(status)}>
-                {statusFormat[String(status)]}
-              </Badge>
-            </CardDescription>
+            {/* <CardDescription> */}
+            {/*   Status: */}
+            {/*   <Badge className="ml-2" variant={convertVariant(status)}> */}
+            {/*     {statusFormat[String(status)]} */}
+            {/*   </Badge> */}
+            {/* </CardDescription> */}
           </div>
-          <Button>Ubah Data</Button>
+
+          <Button asChild>
+            <Link href={`/admin/ternak/${params.id}`}>Ubah Data</Link>
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="gap-5 grid grid-cols-2">
@@ -78,6 +78,16 @@ export default function Page({ params }: { params: { id: string } }) {
               <Label>Berat</Label>
               <FieldValue value={`${weight} Kg`} />
             </div>
+
+            <div>
+              <Label>Status</Label>
+              <FieldValue value={statusFormat[String(status)]} />
+            </div>
+
+            <div>
+              <Label>Harga Beli</Label>
+              <FieldValue value={`${currencyIDR.format(buyPrice)} /Kg`} />
+            </div>
           </div>
           {status === 'AVAILABLE' && (
             <Button className="w-full mt-5">Jual</Button>
@@ -92,7 +102,9 @@ export default function Page({ params }: { params: { id: string } }) {
           </CardTitle>
           <Button>Update Berat</Button>
         </CardHeader>
-        <CardContent>History</CardContent>
+        <CardContent>
+          <HistoryCard />
+        </CardContent>
       </Card>
     </div>
   )
