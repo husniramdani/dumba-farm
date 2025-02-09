@@ -22,7 +22,7 @@ export const ModalQrCode = ({ row }: { row: Row<SelectTernak> }) => {
 
   useEffect(() => {
     QRCode.toDataURL(
-      `${baseUrl}/admin/ternak/${ternakId}`,
+      `${baseUrl}/admin/ternak/detail/${ternakId}`,
       {
         width: 600,
         margin: 2,
