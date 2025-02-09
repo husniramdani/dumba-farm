@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
 import { ModalJual } from '../../ModalJual'
+import DrawerUpdate from './drawerUpdate'
 import HistoryCard from './historyCard'
 
 import { Button } from '@/components/ui/button'
@@ -107,10 +108,10 @@ export default function Page({ params }: { params: { id: string } }) {
             <History />
             History Berat
           </CardTitle>
-          <Button>Update Berat</Button>
+          <DrawerUpdate ternakId={params.id} />
         </CardHeader>
         <CardContent>
-          <HistoryCard />
+          <HistoryCard ternakId={params.id} />
         </CardContent>
       </Card>
 

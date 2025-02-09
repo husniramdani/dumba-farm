@@ -4,11 +4,11 @@ import { createColumns } from './columns'
 
 import { DataTable } from '@/components/ui/datatable'
 import usePagination from '@/hooks/use-pagination'
-import { useTernak } from '@/services/ternak'
+import { useHistoryTernak } from '@/services/historyTernak'
 
-export default function HistoryCard() {
+export default function HistoryCard({ ternakId }) {
   const { page, limit } = usePagination()
-  const { data, isLoading } = useTernak({ page, limit })
+  const { data, isLoading } = useHistoryTernak({ page, limit, ternakId })
 
   const columns = createColumns(page, limit)
 

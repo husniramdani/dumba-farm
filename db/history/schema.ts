@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm'
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { z } from 'zod'
 
 import { ternakTable } from '../ternak/schema'
 
@@ -24,3 +25,23 @@ export const historyTernakTable = sqliteTable('history_ternak', {
 
 export type InsertHistoryTernak = typeof historyTernakTable.$inferInsert
 export type SelectHistoryTernak = typeof historyTernakTable.$inferSelect
+
+// Form Schema
+
+export const formSchema = z
+  .object({
+    ternakId: z.number(),
+    weight: z.coerce.number().refine((val) => val > 0, {
+      message: 'Berat harus diisi',
+    }),
+    notes: z.string(),
+  })
+  .required()
+
+export type FormSchemaType = z.infer<typeof formSchema>
+
+export const defaultValues: FormSchemaType = {
+  ternakId: 0,
+  weight: 0,
+  notes: '',
+}
