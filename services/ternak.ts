@@ -102,11 +102,9 @@ export function useUpdateBeratTernak() {
   return useMutation({
     mutationFn: ({ id, weight }: { id: number; weight: number }) =>
       updateBeratTernak(id, weight),
-    onSuccess: (_, { id }) => {
-      // ✅ Refresh only the details of the specific sheep
-      queryClient.invalidateQueries({ queryKey: ['ternak', id] })
-      // ✅ Refresh only the weight history for this sheep
-      queryClient.invalidateQueries({ queryKey: ['historyTernak', id] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['historyTernak'] })
 
       toast.success('Berat ternak berhasil diperbarui')
     },

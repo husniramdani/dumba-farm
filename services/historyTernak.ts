@@ -23,12 +23,8 @@ export function useCreateHistoryTernak() {
 
   return useMutation({
     mutationFn: (data: FormSchemaType) => createHistoryTernak(data),
-    onSuccess: (_, { ternakId }) => {
-      if (ternakId) {
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEY, ternakId],
-        }) // 🔥 Invalidate only the specific ternak's history
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
       toast.success('Berat ternak berhasil diperbarui')
     },
     onError: (error) => {
