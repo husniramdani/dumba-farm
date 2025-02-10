@@ -119,3 +119,21 @@ export async function jualTernak(id: SelectTernak['id'], price?: number) {
 
   return ternak
 }
+
+export async function updateBeratTernak(
+  id: SelectTernak['id'],
+  weight: number,
+) {
+  const [ternak] = await db
+    .update(ternakTable)
+    .set({ weight })
+    .where(eq(ternakTable.id, id))
+    .returning()
+
+  createHistoryTernak({
+    ternakId: ternak.id,
+    weight: ternak.weight,
+  })
+
+  return ternak
+}

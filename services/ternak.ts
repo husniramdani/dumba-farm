@@ -7,6 +7,7 @@ import {
   getAllTernak,
   getTernakById,
   jualTernak,
+  updateBeratTernak,
   updateTernak,
 } from '@/db/ternak/action'
 import { FormSchemaType, SelectTernak } from '@/db/ternak/schema'
@@ -91,6 +92,27 @@ export function useJualTernak() {
     onError: (error) => {
       toast.error('Gagal memperbarui ternak')
       console.error('Error updating ternak:', error)
+    },
+  })
+}
+
+export function useUpdateBeratTernak() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, weight }: { id: number; weight: number }) =>
+      updateBeratTernak(id, weight),
+    onSuccess: (_, { id }) => {
+      // ✅ Refresh only the details of the specific sheep
+      queryClient.invalidateQueries({ queryKey: ['ternak', id] })
+      // ✅ Refresh only the weight history for this sheep
+      queryClient.invalidateQueries({ queryKey: ['historyTernak', id] })
+
+      toast.success('Berat ternak berhasil diperbarui')
+    },
+    onError: (error) => {
+      toast.error('Gagal memperbarui berat')
+      console.error('Error update berat:', error)
     },
   })
 }

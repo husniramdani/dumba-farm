@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { defaultValues, formSchema, FormSchemaType } from '@/db/history/schema'
-import { useCreateHistoryTernak } from '@/services/historyTernak'
+import { useUpdateBeratTernak } from '@/services/ternak'
 
 export default function DrawerUpdate({ ternakId }) {
   const [showDrawer, setShowDrawer] = useState(false)
@@ -34,10 +34,10 @@ export default function DrawerUpdate({ ternakId }) {
     defaultValues: defaultValues,
   })
 
-  const { mutate } = useCreateHistoryTernak()
+  const { mutate } = useUpdateBeratTernak()
 
   function onSubmit(values: FormSchemaType) {
-    const data = { ...values, ternakId }
+    const data = { id: ternakId, weight: values.weight }
     mutate(data, {
       onSuccess() {
         setShowDrawer(false)

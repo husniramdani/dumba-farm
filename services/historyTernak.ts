@@ -9,7 +9,7 @@ export interface HistoryTernakParams extends PaginationParams {
   ternakId?: number
 }
 
-const QUERY_KEY = 'history_ternak' as const
+const QUERY_KEY = 'historyTernak' as const
 
 export function useHistoryTernak(params: HistoryTernakParams = {}) {
   return useQuery({
@@ -23,8 +23,12 @@ export function useCreateHistoryTernak() {
 
   return useMutation({
     mutationFn: (data: FormSchemaType) => createHistoryTernak(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+    onSuccess: (_, variables) => {
+      if (variables.ternakId) {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEY, variables.ternakId],
+        }) // 🔥 Invalidate only the specific ternak's history
+      }
       toast.success('Berat ternak berhasil diperbarui')
     },
     onError: (error) => {
