@@ -26,7 +26,7 @@ import { Input } from '@/components/ui/input'
 import { defaultValues, formSchema, FormSchemaType } from '@/db/history/schema'
 import { useUpdateBeratTernak } from '@/services/ternak'
 
-export default function DrawerUpdate({ ternakId }) {
+export default function DrawerUpdate({ ternakId, status }) {
   const [showDrawer, setShowDrawer] = useState(false)
 
   const form = useForm<FormSchemaType>({
@@ -48,8 +48,8 @@ export default function DrawerUpdate({ ternakId }) {
 
   return (
     <Drawer open={showDrawer} onOpenChange={setShowDrawer}>
-      <DrawerTrigger>
-        <Button>Update Berat</Button>
+      <DrawerTrigger asChild>
+        <Button disabled={status !== 'AVAILABLE'}>Update Berat</Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>

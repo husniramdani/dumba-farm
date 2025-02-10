@@ -10,6 +10,14 @@ import { ModalJual } from '../../ModalJual'
 import DrawerUpdate from './drawerUpdate'
 import HistoryCard from './historyCard'
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
@@ -44,16 +52,21 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className="space-y-5">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/admin/ternak">Ternak</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Detail Ternak</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <Card>
         <CardHeader className="flex flex-row justify-between items-center">
           <div className="space-y-2">
             <CardTitle>Detail Domba</CardTitle>
-            {/* <CardDescription> */}
-            {/*   Status: */}
-            {/*   <Badge className="ml-2" variant={convertVariant(status)}> */}
-            {/*     {statusFormat[String(status)]} */}
-            {/*   </Badge> */}
-            {/* </CardDescription> */}
           </div>
 
           <Button asChild>
@@ -108,7 +121,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <History />
             History Berat
           </CardTitle>
-          <DrawerUpdate ternakId={params.id} />
+          <DrawerUpdate ternakId={params.id} status={status} />
         </CardHeader>
         <CardContent>
           <HistoryCard ternakId={params.id} />

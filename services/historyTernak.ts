@@ -1,7 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { createHistoryTernak, getAllHistoryTernak } from '@/db/history/action'
+import {
+  createHistoryTernak,
+  deleteHistoryTernak,
+  getAllHistoryTernak,
+} from '@/db/history/action'
 import { FormSchemaType } from '@/db/history/schema'
 import { PaginationParams } from '@/types/model'
 
@@ -30,6 +34,22 @@ export function useCreateHistoryTernak() {
     onError: (error) => {
       toast.error('Gagal memperbarui berat')
       console.error('Error update berat:', error)
+    },
+  })
+}
+
+export function useDeleteHistoryTernak() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (historyId: number) => deleteHistoryTernak(historyId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      toast.success('History ternak berhasil dihapus')
+    },
+    onError: (error) => {
+      toast.error('Gagal menhapus hitory ternak')
+      console.error('Error deleting history ternak', error)
     },
   })
 }

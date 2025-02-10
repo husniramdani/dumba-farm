@@ -65,3 +65,11 @@ export async function getAllHistoryTernak({
     currentPage: page,
   }
 }
+
+export async function deleteHistoryTernak(id: SelectHistoryTernak['id']) {
+  const [deleted] = await db
+    .delete(historyTernakTable)
+    .where(eq(historyTernakTable.id, id))
+    .returning()
+  return deleted
+}

@@ -90,23 +90,23 @@ export default function Page({ params }: { params: { id: string } }) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="weight"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Berat dalam kilogram</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Berat dalam kilogram"
-                    type="number"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* <FormField */}
+          {/*   control={form.control} */}
+          {/*   name="weight" */}
+          {/*   render={({ field }) => ( */}
+          {/*     <FormItem> */}
+          {/*       <FormLabel>Berat dalam kilogram</FormLabel> */}
+          {/*       <FormControl> */}
+          {/*         <Input */}
+          {/*           placeholder="Berat dalam kilogram" */}
+          {/*           type="number" */}
+          {/*           {...field} */}
+          {/*         /> */}
+          {/*       </FormControl> */}
+          {/*       <FormMessage /> */}
+          {/*     </FormItem> */}
+          {/*   )} */}
+          {/* /> */}
 
           <FormField
             control={form.control}
@@ -191,7 +191,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.push('/admin/ternak')}
+              onClick={() => router.back()}
             >
               Kembali
             </Button>

@@ -3,6 +3,8 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowDown, ArrowUp } from 'lucide-react'
 
+import { MenuActions } from './MenuActions'
+
 import { dateFormat } from '@/constants/format'
 import { SelectHistoryTernak } from '@/db/history/schema'
 
@@ -52,5 +54,10 @@ export const createColumns = (
         </div>
       )
     },
+  },
+  {
+    id: 'actions',
+    header: () => <div>Aksi</div>,
+    cell: ({ row }) => <MenuActions row={row} />,
   },
 ]
