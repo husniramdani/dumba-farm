@@ -49,7 +49,7 @@ export default function Page({ params }: { params: { id: string } }) {
   function onSubmit(values: FormSchemaType) {
     mutate(values, {
       onSuccess: () => {
-        router.push('/admin/ternak')
+        router.push(`/admin/ternak/detail/${params.id}`)
       },
     })
   }
