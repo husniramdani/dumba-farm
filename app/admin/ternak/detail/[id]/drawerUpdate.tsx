@@ -68,6 +68,7 @@ export default function DrawerUpdate({ ternakId, status }) {
                     <Input
                       placeholder="Berat dalam kilogram"
                       type="number"
+                      className="text-xs lg:text-sm"
                       {...field}
                     />
                   </FormControl>
