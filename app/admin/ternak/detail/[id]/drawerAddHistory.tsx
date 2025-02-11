@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
@@ -12,7 +11,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from '@/components/ui/drawer'
 import {
   Form,
@@ -26,9 +24,7 @@ import { Input } from '@/components/ui/input'
 import { defaultValues, formSchema, FormSchemaType } from '@/db/history/schema'
 import { useUpdateBeratTernak } from '@/services/ternak'
 
-export default function DrawerAddHistory({ ternakId, status }) {
-  const [showDrawer, setShowDrawer] = useState(false)
-
+export default function DrawerAddHistory({ ternakId, open, onOpenChange }) {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
@@ -40,17 +36,14 @@ export default function DrawerAddHistory({ ternakId, status }) {
     const data = { id: ternakId, weight: values.weight }
     mutate(data, {
       onSuccess() {
-        setShowDrawer(false)
+        onOpenChange(false)
         form.reset()
       },
     })
   }
 
   return (
-    <Drawer open={showDrawer} onOpenChange={setShowDrawer}>
-      <DrawerTrigger asChild>
-        <Button disabled={status !== 'AVAILABLE'}>Update Berat</Button>
-      </DrawerTrigger>
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Masukkan Berat Terbaru</DrawerTitle>

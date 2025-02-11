@@ -54,9 +54,6 @@ export const ModalQrCode = ({ row }: { row: Row<SelectTernak> }) => {
           <Image src={QRCodeURL} alt="qr-code" width={400} height={400} />
         </div>
         <div className="flex justify-between gap-x-4">
-          <Button variant="outline" type="button" className="w-full">
-            Share
-          </Button>
           <Button asChild type="button" className="w-full">
             <a href={QRCodeURL} download={`qrcode-${ternakId}.png`}>
               Download

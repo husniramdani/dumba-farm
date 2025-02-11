@@ -19,6 +19,7 @@ export async function createTernak(data: InsertTernak) {
     type: 'EXPENSE',
     category: 'TERNAK',
     amount: newTernak.buyPrice,
+    quantity: newTernak.weight,
   })
 
   // Init first ternak weight
@@ -114,7 +115,8 @@ export async function jualTernak(id: SelectTernak['id'], price?: number) {
     ternakId: id,
     type: 'INCOME',
     category: 'TERNAK',
-    amount: price || ternak.weight * currentPrice,
+    amount: price || currentPrice,
+    quantity: ternak.weight,
   })
 
   return ternak

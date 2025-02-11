@@ -32,8 +32,10 @@ export default function Page({ params }: { params: { id: string } }) {
     defaultValues,
   })
 
-  const { data, isLoading } = useTernakDetail(Number(params.id))
   const [showJualAlert, setShowJualAlert] = useState(false)
+  const [showAddDrawer, setShowAddDrawer] = useState(false)
+
+  const { data, isLoading } = useTernakDetail(Number(params.id))
 
   useEffect(() => {
     if (data) {
@@ -121,13 +123,23 @@ export default function Page({ params }: { params: { id: string } }) {
             <History />
             History Berat
           </CardTitle>
-          <DrawerAddHistory ternakId={params.id} status={status} />
+          <Button
+            disabled={status !== 'AVAILABLE'}
+            onClick={() => setShowAddDrawer(true)}
+          >
+            Update Berat
+          </Button>
         </CardHeader>
         <CardContent>
           <HistoryCard ternakId={params.id} />
         </CardContent>
       </Card>
 
+      <DrawerAddHistory
+        ternakId={params.id}
+        open={showAddDrawer}
+        onOpenChange={setShowAddDrawer}
+      />
       <ModalJual
         ternakId={params.id}
         showJualAlert={showJualAlert}

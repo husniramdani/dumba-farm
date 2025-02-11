@@ -4,6 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -44,105 +52,124 @@ export default function Page() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="gender"
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel>Jenis Kelamin</FormLabel>
-              <FormControl>
-                <RadioGroup
+    <div className="space-y-5">
+      <h1 className="text-3xl font-bold">Tambah Ternak</h1>
+
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/admin/ternak">Ternak</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Tambah Ternak</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel>Jenis Kelamin</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex space-x-4"
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="MALE" />
+                      </FormControl>
+                      <FormLabel className="cursor-pointer">Jantan</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="FEMALE" />
+                      </FormControl>
+                      <FormLabel className="cursor-pointer">Betina</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="weight"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Berat dalam kilogram</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Berat dalam kilogram"
+                    type="number"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="age"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Umur (bulan)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Umur domba dalam bulan"
+                    type="number"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <MoneyInput
+            form={form}
+            name="buyPrice"
+            label="Harga beli per kilogram"
+            placeholder="Masukkan harga beli"
+          />
+          <FormField
+            control={form.control}
+            name="breed"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Jenis Domba</FormLabel>
+                <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex space-x-4"
                 >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="MALE" />
-                    </FormControl>
-                    <FormLabel className="cursor-pointer">Jantan</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="FEMALE" />
-                    </FormControl>
-                    <FormLabel className="cursor-pointer">Betina</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="weight"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Berat dalam kilogram</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Berat dalam kilogram"
-                  type="number"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="age"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Umur (bulan)</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Umur domba dalam bulan"
-                  type="number"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <MoneyInput
-          form={form}
-          name="buyPrice"
-          label="Harga beli per kilogram"
-          placeholder="Masukkan harga beli"
-        />
-        <FormField
-          control={form.control}
-          name="breed"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Jenis Domba</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih jenis domba" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="GARUT">Garut</SelectItem>
-                  <SelectItem value="LOKAL">Lokal</SelectItem>
-                  <SelectItem value="PRIANGAN">Priangan</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={isPending}>
-          {isPending ? 'Menyimpan...' : 'Submit'}
-        </Button>
-      </form>
-    </Form>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih jenis domba" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="GARUT">Garut</SelectItem>
+                    <SelectItem value="LOKAL">Lokal</SelectItem>
+                    <SelectItem value="PRIANGAN">Priangan</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" disabled={isPending}>
+            {isPending ? 'Menyimpan...' : 'Submit'}
+          </Button>
+        </form>
+      </Form>
+    </div>
   )
 }

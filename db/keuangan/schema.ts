@@ -19,6 +19,7 @@ export const keuanganTable = sqliteTable('keuangan', {
   type: text('type', { enum: TRANSACTION_TYPE }).notNull(),
   category: text('category', { enum: TRANSACTION_CATEGORY }).notNull(),
   amount: real('amount').notNull(),
+  quantity: integer('quantity', { mode: 'number' }).default(0).notNull(),
   description: text('description'),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)

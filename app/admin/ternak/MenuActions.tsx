@@ -3,6 +3,7 @@ import { type Row } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
 
+import DrawerAddHistory from './detail/[id]/drawerAddHistory'
 import { ModalJual } from './ModalJual'
 
 import {
@@ -33,6 +34,7 @@ export const MenuActions = ({ row }: { row: Row<SelectTernak> }) => {
 
   const [showDeleteAlert, setShowDeleteAlert] = useState(false)
   const [showJualAlert, setShowJualAlert] = useState(false)
+  const [showAddDrawer, setShowAddDrawer] = useState(false)
 
   const deleteTernak = useDeleteTernak()
   const handleDelete = () => {
@@ -52,22 +54,35 @@ export const MenuActions = ({ row }: { row: Row<SelectTernak> }) => {
           <DropdownMenuLabel>Aksi</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={`/admin/ternak/detail/${ternakId}`}>Detail</Link>
+            <Link href={`/admin/ternak/detail/${ternakId}`}>Lihat Detail</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={`/admin/ternak/${ternakId}`}>Ubah</Link>
+            <Link href={`/admin/ternak/${ternakId}`}>Ubah Data</Link>
           </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={status !== 'AVAILABLE'}
+            onClick={() => setShowAddDrawer(true)}
+          >
+            Update Berat
+          </DropdownMenuItem>
+
           <DropdownMenuItem
             disabled={status === 'SOLD'}
             onClick={() => setShowJualAlert(true)}
           >
-            Jual
+            Jual Ternak
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setShowDeleteAlert(true)}>
             Hapus
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <DrawerAddHistory
+        ternakId={ternakId}
+        open={showAddDrawer}
+        onOpenChange={setShowAddDrawer}
+      />
 
       <ModalJual
         ternakId={ternakId}
