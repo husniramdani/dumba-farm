@@ -7,6 +7,7 @@ import {
   getAllTernak,
   getTernakById,
   jualTernak,
+  syncTernakWeightFromHistory,
   updateBeratTernak,
   updateTernak,
 } from '@/db/ternak/action'
@@ -111,6 +112,24 @@ export function useUpdateBeratTernak() {
     onError: (error) => {
       toast.error('Gagal memperbarui berat')
       console.error('Error update berat:', error)
+    },
+  })
+}
+
+export function useSyncTernakWeightFromHistory() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (ternakId: number) => syncTernakWeightFromHistory(ternakId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['historyTernak'] })
+
+      toast.success('Sync history berhasil')
+    },
+    onError: (error) => {
+      toast.error('Gagal sync history')
+      console.error('Error sync history:', error)
     },
   })
 }

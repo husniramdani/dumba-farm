@@ -3,6 +3,7 @@
 import { desc, eq } from 'drizzle-orm'
 
 import { db } from '../index'
+import { syncTernakWeightFromHistory } from '../ternak/action'
 import {
   historyTernakTable,
   InsertHistoryTernak,
@@ -66,10 +67,32 @@ export async function getAllHistoryTernak({
   }
 }
 
+export async function updateHistoryTernak(
+  id: SelectHistoryTernak['id'],
+  data: Partial<Omit<SelectHistoryTernak, 'id' | 'createdAt' | 'updatedAt'>>,
+) {
+  const [updated] = await db
+    .update(historyTernakTable)
+    .set(data)
+    .where(eq(historyTernakTable.id, id))
+    .returning()
+
+  if (updated) {
+    await syncTernakWeightFromHistory(updated.ternakId)
+  }
+
+  return updated
+}
+
 export async function deleteHistoryTernak(id: SelectHistoryTernak['id']) {
   const [deleted] = await db
     .delete(historyTernakTable)
     .where(eq(historyTernakTable.id, id))
     .returning()
+
+  if (deleted) {
+    await syncTernakWeightFromHistory(deleted.ternakId)
+  }
+
   return deleted
 }

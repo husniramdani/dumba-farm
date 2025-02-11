@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { type Row } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
-import Link from 'next/link'
+import { useParams } from 'next/navigation'
+
+import DrawerEditHistory from './drawerEditHistory'
 
 import {
   AlertDialog,
@@ -26,8 +28,10 @@ import { SelectHistoryTernak } from '@/db/history/schema'
 import { useDeleteHistoryTernak } from '@/services/historyTernak'
 
 export const MenuActions = ({ row }: { row: Row<SelectHistoryTernak> }) => {
+  const params = useParams<{ id: string }>()
   const historyId = row.original.id
 
+  const [showEditDrawer, setShowEditDrawer] = useState(false)
   const [showDeleteAlert, setShowDeleteAlert] = useState(false)
 
   const deleteHistoryTernak = useDeleteHistoryTernak()
@@ -47,8 +51,8 @@ export const MenuActions = ({ row }: { row: Row<SelectHistoryTernak> }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Aksi</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <Link href={`/admin/ternak/${historyId}`}>Ubah</Link>
+          <DropdownMenuItem onClick={() => setShowEditDrawer(true)}>
+            Ubah
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setShowDeleteAlert(true)}>
             Hapus
@@ -56,6 +60,12 @@ export const MenuActions = ({ row }: { row: Row<SelectHistoryTernak> }) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
+      <DrawerEditHistory
+        ternakId={Number(params.id)}
+        historyId={historyId}
+        open={showEditDrawer}
+        onOpenChange={setShowEditDrawer}
+      />
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>

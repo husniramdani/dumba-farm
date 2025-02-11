@@ -67,7 +67,6 @@ export default function MoneyInput<T extends FieldValues>({
               type="text"
               {...field}
               onChange={(e) => {
-                console.log(field.onChange)
                 handleChange(field.onChange, e.target.value)
               }}
               value={value}

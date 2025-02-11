@@ -5,8 +5,9 @@ import {
   createHistoryTernak,
   deleteHistoryTernak,
   getAllHistoryTernak,
+  updateHistoryTernak,
 } from '@/db/history/action'
-import { FormSchemaType } from '@/db/history/schema'
+import { FormSchemaType, SelectHistoryTernak } from '@/db/history/schema'
 import { PaginationParams } from '@/types/model'
 
 export interface HistoryTernakParams extends PaginationParams {
@@ -38,6 +39,28 @@ export function useCreateHistoryTernak() {
   })
 }
 
+export function useUpdateHistoryTernak(id: number) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (
+      data: Partial<
+        Omit<SelectHistoryTernak, 'id' | 'createdAt' | 'updatedAt'>
+      >,
+    ) => updateHistoryTernak(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['ternak'] })
+
+      toast.success('History ternak berhasil diperbarui')
+    },
+    onError: (error) => {
+      toast.error('Gagal memperbarui history ternak')
+      console.error('Error updating ternak:', error)
+    },
+  })
+}
+
 export function useDeleteHistoryTernak() {
   const queryClient = useQueryClient()
 
@@ -45,6 +68,8 @@ export function useDeleteHistoryTernak() {
     mutationFn: (historyId: number) => deleteHistoryTernak(historyId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['ternak'] })
+
       toast.success('History ternak berhasil dihapus')
     },
     onError: (error) => {

@@ -3,6 +3,7 @@
 import { asc, desc, eq } from 'drizzle-orm'
 
 import { createHistoryTernak } from '../history/action'
+import { historyTernakTable } from '../history/schema'
 import { db } from '../index'
 import { createKeuangan } from '../keuangan/action'
 import { InsertTernak, SelectTernak, ternakTable } from './schema'
@@ -86,7 +87,6 @@ export async function updateTernak(
   //     category: 'TERNAK',
   //     amount: updated.weight * currentPrice,
   //   })
-  //   console.log('updated', updated)
   // }
 
   return updated
@@ -136,4 +136,36 @@ export async function updateBeratTernak(
   })
 
   return ternak
+}
+
+/**
+ * Syncs the main ternak record’s weight with the latest history record.
+ *
+ * @param ternakId - The ID of the ternak to update.
+ * @returns The updated ternak record, or null if no history was found.
+ */
+export async function syncTernakWeightFromHistory(
+  ternakId: SelectTernak['id'],
+): Promise<SelectTernak | null> {
+  // Retrive the latest history record for the given ternak.
+  const [latestHistory] = await db
+    .select({ weight: historyTernakTable.weight })
+    .from(historyTernakTable)
+    .where(eq(historyTernakTable.ternakId, ternakId))
+    .orderBy(desc(historyTernakTable.createdAt))
+    .limit(1)
+
+  if (!latestHistory) {
+    console.warn(`No history found for ternakId ${ternakId}.`)
+    return null
+  }
+
+  // Update the main ternak record to use the latest weight
+  const [updatedTernak] = await db
+    .update(ternakTable)
+    .set({ weight: latestHistory.weight })
+    .where(eq(ternakTable.id, ternakId))
+    .returning()
+
+  return updatedTernak
 }
