@@ -39,6 +39,9 @@ export const formSchema = z
     type: z.enum(TRANSACTION_TYPE).default('EXPENSE'),
     category: z.enum(TRANSACTION_CATEGORY).default('TERNAK'),
     amount: z.coerce.number().refine((val) => val > 0, {
+      message: 'Harga harus diisi',
+    }),
+    quantity: z.coerce.number().refine((val) => val > 0, {
       message: 'Jumlah harus diisi',
     }),
   })
@@ -50,4 +53,5 @@ export const defaultValues: FormSchemaType = {
   type: 'EXPENSE',
   category: 'TERNAK',
   amount: 0,
+  quantity: 0,
 }

@@ -30,3 +30,10 @@ export function dateFormat(value) {
   })
   return formatter.format(date)
 }
+
+export const categoryToSatuanFormat = {
+  TERNAK: 'kg',
+  PAKAN: 'kg',
+  OBAT: 'pcs',
+  PEGAWAI: 'orang',
+}

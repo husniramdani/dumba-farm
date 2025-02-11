@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ColumnDef, type Row } from '@tanstack/react-table'
-import { MoreHorizontal } from 'lucide-react'
+import { MinusSquare, MoreHorizontal, PlusSquare } from 'lucide-react'
 import Link from 'next/link'
 
 import {
@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { Badge } from '@/components/ui/badge'
+// import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -25,14 +25,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { dateFormat, transactionTypeFormat } from '@/constants/format'
+import { categoryToSatuanFormat, dateFormat } from '@/constants/format'
 import { currencyIDR } from '@/constants/format'
 import { SelectKeuangan } from '@/db/keuangan/schema'
+import { cn } from '@/lib/utils'
 import { useDeleteKeuangan } from '@/services/keuangan'
 
-const convertVariant = (type: string) => {
-  if (type === 'EXPENSE') return 'destructiveOutline'
-  if (type === 'INCOME') return 'successOutline'
+// const convertVariant = (type: string) => {
+//   if (type === 'EXPENSE') return 'destructiveOutline'
+//   if (type === 'INCOME') return 'successOutline'
+// }
+
+const convertTypeToColor = (type: string) => {
+  if (type === 'EXPENSE') return 'text-red-500'
+  if (type === 'INCOME') return 'text-green-600'
 }
 
 export const createColumns = (
@@ -44,18 +50,18 @@ export const createColumns = (
     header: () => <div>No.</div>,
     cell: ({ row }) => <div>{row.index + 1 + (page - 1) * limit}</div>,
   },
-  {
-    accessorKey: 'type',
-    header: () => <div>Tipe</div>,
-    cell: ({ row }) => (
-      <Badge
-        className="capitalize"
-        variant={convertVariant(row.getValue('type'))}
-      >
-        {transactionTypeFormat[String(row.getValue('type'))]}
-      </Badge>
-    ),
-  },
+  // {
+  //   accessorKey: 'type',
+  //   header: () => <div>Tipe</div>,
+  //   cell: ({ row }) => (
+  //     <Badge
+  //       className="capitalize"
+  //       variant={convertVariant(row.getValue('type'))}
+  //     >
+  //       {transactionTypeFormat[String(row.getValue('type'))]}
+  //     </Badge>
+  //   ),
+  // },
   {
     accessorKey: 'category',
     header: () => <div>Categori</div>,
@@ -67,12 +73,46 @@ export const createColumns = (
   },
   {
     accessorKey: 'amount',
-    header: () => <div>Jumlah</div>,
-    cell: ({ row }) => <div>{currencyIDR.format(row.getValue('amount'))} </div>,
+    header: () => <div>Harga</div>,
+    cell: ({ row }) => <div>{currencyIDR.format(row.getValue('amount'))}</div>,
   },
   {
+    accessorKey: 'quantity',
+    header: () => <div>Satuan</div>,
+    cell: ({ row }) => (
+      <div>
+        {row.getValue('quantity')}{' '}
+        {categoryToSatuanFormat[row.original.category]}
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'total',
+    header: () => <div>Total</div>,
+    cell: ({ row }) => {
+      const type = row.original.type
+      const total = row.original.amount * row.original.quantity
+      return (
+        <div
+          className={cn(
+            'flex gap-1.5 font-semibold items-center',
+            convertTypeToColor(type),
+          )}
+        >
+          {type === 'INCOME' ? (
+            <PlusSquare size={18} />
+          ) : (
+            <MinusSquare size={18} />
+          )}
+          {currencyIDR.format(total)}
+        </div>
+      )
+    },
+  },
+
+  {
     accessorKey: 'createdAt',
-    header: () => <div>Tanggal Dibuat</div>,
+    header: () => <div>Tanggal</div>,
     cell: ({ row }) => <div>{dateFormat(row.getValue('createdAt'))}</div>,
   },
   {
