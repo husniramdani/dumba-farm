@@ -2,7 +2,7 @@ import { type ClassValue, clsx } from 'clsx'
 import { format } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
 
-import { dateFormat } from '@/constants/format'
+import { currencyIDR, dateFormat } from '@/constants/format'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 export function cn(...inputs: ClassValue[]) {
@@ -39,4 +39,9 @@ export const DateCell = ({ date }) => {
     : dateFormat(date)
 
   return formattedDate
+}
+
+export const convertToRupiah = (val: number | string) => {
+  if (!val && val !== 0) return ''
+  return currencyIDR.format(Number(val))
 }
