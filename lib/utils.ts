@@ -1,5 +1,9 @@
 import { type ClassValue, clsx } from 'clsx'
+import { format } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
+
+import { dateFormat } from '@/constants/format'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -22,7 +26,17 @@ export const convertMonthsToYearsAndMonths = (months: number): string => {
 }
 
 export const convertVariant = (status: string) => {
-  if (status === 'AVAILABLE') return 'infoOutline'
-  if (status === 'SOLD') return 'successOutline'
-  if (status === 'DEAD') return 'destructiveOutline'
+  if (status === 'AVAILABLE') return 'solidBlue'
+  if (status === 'SOLD') return 'solidGreen'
+  if (status === 'DEAD') return 'outlineRed'
+}
+
+export const DateCell = ({ date }) => {
+  const isMobile = useIsMobile()
+
+  const formattedDate = isMobile
+    ? format(new Date(date), 'dd MMM yy')
+    : dateFormat(date)
+
+  return formattedDate
 }

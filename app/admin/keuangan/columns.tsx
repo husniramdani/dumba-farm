@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-// import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -25,16 +25,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { categoryToSatuanFormat, dateFormat } from '@/constants/format'
+import { categoryToSatuanFormat } from '@/constants/format'
 import { currencyIDR } from '@/constants/format'
 import { SelectKeuangan } from '@/db/keuangan/schema'
-import { cn } from '@/lib/utils'
+import { cn, DateCell } from '@/lib/utils'
 import { useDeleteKeuangan } from '@/services/keuangan'
 
-// const convertVariant = (type: string) => {
-//   if (type === 'EXPENSE') return 'destructiveOutline'
-//   if (type === 'INCOME') return 'successOutline'
-// }
+const convertCategoryToVariant = (type: string) => {
+  if (type === 'TERNAK') return 'solidBlue'
+  if (type === 'PAKAN') return 'solidYellow'
+  if (type === 'OBAT') return 'solidPurple'
+  if (type === 'PEGAWAI') return 'secondary'
+}
 
 const convertTypeToColor = (type: string) => {
   if (type === 'EXPENSE') return 'text-red-500'
@@ -50,24 +52,17 @@ export const createColumns = (
     header: () => <div>No.</div>,
     cell: ({ row }) => <div>{row.index + 1 + (page - 1) * limit}</div>,
   },
-  // {
-  //   accessorKey: 'type',
-  //   header: () => <div>Tipe</div>,
-  //   cell: ({ row }) => (
-  //     <Badge
-  //       className="capitalize"
-  //       variant={convertVariant(row.getValue('type'))}
-  //     >
-  //       {transactionTypeFormat[String(row.getValue('type'))]}
-  //     </Badge>
-  //   ),
-  // },
   {
     accessorKey: 'category',
     header: () => <div>Categori</div>,
     cell: ({ row }) => (
       <div className="capitalize">
-        {String(row.getValue('category')).toLowerCase()}
+        <Badge
+          className="capitalize"
+          variant={convertCategoryToVariant(row.getValue('category'))}
+        >
+          {String(row.getValue('category')).toLowerCase()}
+        </Badge>
       </div>
     ),
   },
@@ -106,7 +101,7 @@ export const createColumns = (
   {
     accessorKey: 'createdAt',
     header: () => <div>Tanggal</div>,
-    cell: ({ row }) => <div>{dateFormat(row.getValue('createdAt'))}</div>,
+    cell: ({ row }) => <DateCell date={row.getValue('createdAt')} />,
   },
   {
     id: 'actions',

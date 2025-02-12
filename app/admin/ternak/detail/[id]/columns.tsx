@@ -5,9 +5,9 @@ import { ArrowDown, ArrowUp } from 'lucide-react'
 
 import { MenuActions } from './MenuActions'
 
-import { dateFormat } from '@/constants/format'
+import { Badge } from '@/components/ui/badge'
 import { SelectHistoryTernak } from '@/db/history/schema'
-import { cn } from '@/lib/utils'
+import { DateCell } from '@/lib/utils'
 
 export interface THistoryTernakTable extends SelectHistoryTernak {
   progress?: number
@@ -25,7 +25,7 @@ export const createColumns = (
   {
     accessorKey: 'createdAt',
     header: () => <div>Tanggal</div>,
-    cell: ({ row }) => <div>{dateFormat(row.getValue('createdAt'))}</div>,
+    cell: ({ row }) => <DateCell date={row.getValue('createdAt')} />,
   },
   {
     accessorKey: 'weight',
@@ -45,18 +45,14 @@ export const createColumns = (
       if (progress === null || progress === undefined) return <div>0.0%</div>
 
       return (
-        <div className="flex items-center gap-1">
+        <Badge variant={progress > 0 ? 'solidGreen' : 'solidRed'}>
           {progress > 0 ? (
-            <ArrowUp className="w-4 h-4 text-green-500" />
+            <ArrowUp size={14} />
           ) : progress < 0 ? (
-            <ArrowDown className="w-4 h-4 text-red-500" />
+            <ArrowDown size={16} />
           ) : null}
-          <span
-            className={cn(progress > 0 ? 'text-green-500' : 'text-red-500')}
-          >
-            {Math.abs(progress).toFixed(1)}%
-          </span>
-        </div>
+          <span>{Math.abs(progress).toFixed(1)}%</span>
+        </Badge>
       )
     },
   },
