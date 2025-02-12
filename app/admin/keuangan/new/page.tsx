@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -23,8 +24,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { defaultValues, formSchema, FormSchemaType } from '@/db/ternak/schema'
-import { useCreateTernak } from '@/services/ternak'
+import { categoryToSatuanFormat } from '@/constants/format'
+import { defaultValues, formSchema, FormSchemaType } from '@/db/keuangan/schema'
+import { useCreateKeuangan } from '@/services/keuangan'
 
 export default function Page() {
   const router = useRouter()
@@ -33,12 +35,16 @@ export default function Page() {
     defaultValues: defaultValues,
   })
 
-  const { mutate, isPending } = useCreateTernak()
+  const [quantityFormat, setQuantityFormat] = useState(
+    categoryToSatuanFormat[defaultValues.category],
+  )
+
+  const { mutate, isPending } = useCreateKeuangan()
 
   function onSubmit(values: FormSchemaType) {
     mutate(values, {
       onSuccess: () => {
-        router.push('/admin/ternak')
+        router.push('/admin/keuangan')
       },
     })
   }
@@ -48,10 +54,10 @@ export default function Page() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="gender"
+          name="type"
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>Jenis Kelamin</FormLabel>
+              <FormLabel>Tipe Transaksi</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
@@ -60,34 +66,19 @@ export default function Page() {
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="MALE" />
+                      <RadioGroupItem value="INCOME" />
                     </FormControl>
-                    <FormLabel className="cursor-pointer">Jantan</FormLabel>
+                    <FormLabel className="cursor-pointer">Pemasukan</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="FEMALE" />
+                      <RadioGroupItem value="EXPENSE" />
                     </FormControl>
-                    <FormLabel className="cursor-pointer">Betina</FormLabel>
+                    <FormLabel className="cursor-pointer">
+                      Pengeluaran
+                    </FormLabel>
                   </FormItem>
                 </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="weight"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Berat dalam kilogram</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Berat dalam kilogram"
-                  type="number"
-                  {...field}
-                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,49 +87,54 @@ export default function Page() {
 
         <FormField
           control={form.control}
-          name="age"
+          name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Umur (bulan)</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Umur domba dalam bulan"
-                  type="number"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <MoneyInput
-          form={form}
-          name="buyPrice"
-          label="Harga beli per kilogram"
-          placeholder="Masukkan harga beli"
-        />
-        <FormField
-          control={form.control}
-          name="breed"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Jenis Domba</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormLabel>Category</FormLabel>
+              <Select
+                onValueChange={(e) => {
+                  field.onChange(e)
+                  setQuantityFormat(categoryToSatuanFormat[e])
+                }}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Pilih jenis domba" />
+                    <SelectValue placeholder="Pilih category" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="GARUT">Garut</SelectItem>
-                  <SelectItem value="LOKAL">Lokal</SelectItem>
-                  <SelectItem value="PRIANGAN">Priangan</SelectItem>
+                  <SelectItem value="TERNAK">Ternak</SelectItem>
+                  <SelectItem value="PAKAN">Pakan</SelectItem>
+                  <SelectItem value="OBAT">Obat</SelectItem>
+                  <SelectItem value="PEGAWAI">Pegawai</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        <MoneyInput
+          form={form}
+          name="amount"
+          label="Harga"
+          placeholder="Masukkan harga"
+        />
+        <FormField
+          control={form.control}
+          name="quantity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Jumlah ({quantityFormat})</FormLabel>
+              <FormControl>
+                <Input placeholder="Jumlah" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit" disabled={isPending}>
           {isPending ? 'Menyimpan...' : 'Submit'}
         </Button>

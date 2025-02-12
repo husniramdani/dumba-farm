@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ColumnDef, type Row } from '@tanstack/react-table'
-import { MinusSquare, MoreHorizontal, PlusSquare } from 'lucide-react'
+import { Minus, MoreHorizontal, Plus } from 'lucide-react'
 import Link from 'next/link'
 
 import {
@@ -38,7 +38,7 @@ import { useDeleteKeuangan } from '@/services/keuangan'
 
 const convertTypeToColor = (type: string) => {
   if (type === 'EXPENSE') return 'text-red-500'
-  if (type === 'INCOME') return 'text-green-600'
+  if (type === 'INCOME') return 'text-green-500'
 }
 
 export const createColumns = (
@@ -78,7 +78,7 @@ export const createColumns = (
   },
   {
     accessorKey: 'quantity',
-    header: () => <div>Satuan</div>,
+    header: () => <div>Jumlah</div>,
     cell: ({ row }) => (
       <div>
         {row.getValue('quantity')}{' '}
@@ -94,16 +94,9 @@ export const createColumns = (
       const total = row.original.amount * row.original.quantity
       return (
         <div
-          className={cn(
-            'flex gap-1.5 font-semibold items-center',
-            convertTypeToColor(type),
-          )}
+          className={cn('flex gap-1 items-center', convertTypeToColor(type))}
         >
-          {type === 'INCOME' ? (
-            <PlusSquare size={18} />
-          ) : (
-            <MinusSquare size={18} />
-          )}
+          {type === 'INCOME' ? <Plus size={16} /> : <Minus size={16} />}
           {currencyIDR.format(total)}
         </div>
       )

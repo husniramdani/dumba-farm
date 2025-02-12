@@ -7,6 +7,7 @@ import { MenuActions } from './MenuActions'
 
 import { dateFormat } from '@/constants/format'
 import { SelectHistoryTernak } from '@/db/history/schema'
+import { cn } from '@/lib/utils'
 
 export interface THistoryTernakTable extends SelectHistoryTernak {
   progress?: number
@@ -50,7 +51,11 @@ export const createColumns = (
           ) : progress < 0 ? (
             <ArrowDown className="w-4 h-4 text-red-500" />
           ) : null}
-          <span>{Math.abs(progress).toFixed(1)}%</span>
+          <span
+            className={cn(progress > 0 ? 'text-green-500' : 'text-red-500')}
+          >
+            {Math.abs(progress).toFixed(1)}%
+          </span>
         </div>
       )
     },
