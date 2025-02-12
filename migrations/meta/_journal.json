@@ -15,6 +15,13 @@
       "when": 1739289766139,
       "tag": "0001_useful_captain_midlands",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1739378807985,
+      "tag": "0002_free_firebrand",
+      "breakpoints": true
     }
   ]
 }

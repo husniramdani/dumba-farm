@@ -12,3 +12,5 @@ export const TRANSACTION_CATEGORY = [
   'OBAT',
   'PEGAWAI',
 ] as const
+
+export const MARKET_TYPE = ['DAGING', 'KARKAS', 'DOMBA'] as const

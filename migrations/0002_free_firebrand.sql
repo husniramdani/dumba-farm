@@ -1,0 +1,1 @@
+ALTER TABLE `market_price` ADD `type` text NOT NULL;
