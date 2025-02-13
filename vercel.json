@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "app/api/domba/route.ts": {
+      "runtime": "nodejs18.x",
+      "schedule": "*/1 * * * *"
+    }
+  }
+}

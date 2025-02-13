@@ -5,11 +5,7 @@ import { NextResponse } from 'next/server'
 import { db } from '@/db'
 import { InsertMarketPrice, marketPriceTable } from '@/db/market-price/schema'
 
-// Configure the function to run every hour
-export const config = {
-  runtime: 'nodejs', // or 'edge' if you prefer
-  schedule: '*/5 * * * * *', // runs every 5 seconds for debugging
-}
+export const runtime = 'nodejs'
 
 export async function GET() {
   try {
