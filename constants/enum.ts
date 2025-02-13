@@ -14,3 +14,5 @@ export const TRANSACTION_CATEGORY = [
 ] as const
 
 export const MARKET_TYPE = ['DAGING', 'KARKAS', 'DOMBA'] as const
+
+export type MarketType = (typeof MARKET_TYPE)[number]

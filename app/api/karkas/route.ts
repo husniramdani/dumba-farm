@@ -2,8 +2,9 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { NextResponse } from 'next/server'
 
-// import { db } from '@/db'
-// import { marketPriceTable } from '@/db/market-price/schema'
+import { db } from '@/db'
+import { InsertMarketPrice } from '@/db/market-price/schema'
+import { marketPriceTable } from '@/db/market-price/schema'
 
 export async function GET() {
   try {
@@ -45,15 +46,13 @@ export async function GET() {
       }
     })
 
-    const marketPriceData = {
+    const marketPriceData: InsertMarketPrice = {
       price: dagingMurniPrice,
-      date: new Date(),
       source: 'Wedoes - Karkas',
+      type: 'KARKAS',
     }
 
-    // TODO: make it not duplicate in the same date
-    // this should be running once
-    // await db.insert(marketPriceTable).values(marketPriceData).returning()
+    await db.insert(marketPriceTable).values(marketPriceData).returning()
 
     if (!dagingMurniPrice) {
       return NextResponse.json(

@@ -2,8 +2,9 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { NextResponse } from 'next/server'
 
-// import { db } from '@/db'
-// import { marketPriceTable } from '@/db/market-price/schema'
+import { db } from '@/db'
+import { InsertMarketPrice } from '@/db/market-price/schema'
+import { marketPriceTable } from '@/db/market-price/schema'
 
 export async function GET() {
   try {
@@ -37,9 +38,13 @@ export async function GET() {
 
     console.log('Fetched Data', { price, lastDate })
 
-    const marketPriceData = { price, date: lastDate, source: 'Simponi Ternak' }
+    const marketPriceData: InsertMarketPrice = {
+      price,
+      source: 'Simponi Ternak',
+      type: 'DAGING',
+    }
 
-    // await db.insert(marketPriceTable).values(marketPriceData).returning()
+    await db.insert(marketPriceTable).values(marketPriceData).returning()
 
     return NextResponse.json(marketPriceData)
   } catch (error) {

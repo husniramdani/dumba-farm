@@ -21,14 +21,19 @@ export const transactionTypeFormat = {
   INCOME: 'Pemasukan',
 }
 
-export function dateFormat(value) {
-  const date = new Date(value)
+export function dateFormat(date: string | Date | null | undefined) {
+  if (!date) return 'Invalid Date' // Handle null or undefined values
+
+  const parsedDate = new Date(date)
+  if (isNaN(parsedDate.getTime())) return 'Invalid Date' // Handle invalid dates
+
   const formatter = new Intl.DateTimeFormat('id-ID', {
-    day: 'numeric',
+    day: '2-digit',
     month: 'long',
     year: 'numeric',
   })
-  return formatter.format(date)
+
+  return formatter.format(parsedDate)
 }
 
 export const categoryToSatuanFormat = {

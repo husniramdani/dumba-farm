@@ -52,7 +52,7 @@ export async function GET() {
 
     const marketPriceData: InsertMarketPrice = {
       price: targetPrice,
-      source: 'Taniku - Domba ekor kurus betina muda (Harga Terendah)',
+      source: 'Taniku - Domba ekor kurus',
       type: 'DOMBA',
     }
 
