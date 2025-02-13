@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/domba",
+      "schedule": "0 10 * * *"
+    }
+  ]
+}
