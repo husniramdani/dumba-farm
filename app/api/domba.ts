@@ -5,8 +5,6 @@ import { NextResponse } from 'next/server'
 import { db } from '@/db'
 import { InsertMarketPrice, marketPriceTable } from '@/db/market-price/schema'
 
-export const runtime = 'nodejs'
-
 export async function GET() {
   try {
     const url = 'https://taniku.kulonprogokab.go.id/siganak/domba'
