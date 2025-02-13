@@ -17,7 +17,7 @@ export default function CardPrice() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/scrapping')
+      const response = await fetch('/api/domba')
       const result = await response.json()
 
       if (response.ok) {
@@ -50,7 +50,7 @@ export default function CardPrice() {
     return (
       <Card>
         <CardContent className="p-6">
-          <div className="text-red-500">Loading...</div>
+          <div>Loading...</div>
         </CardContent>
       </Card>
     )
