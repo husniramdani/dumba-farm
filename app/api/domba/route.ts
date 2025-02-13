@@ -56,16 +56,8 @@ export async function GET() {
       type: 'DOMBA',
     }
 
-    console.log(
-      'Cron Debug: Scraped price',
-      targetPrice,
-      'at',
-      new Date().toISOString(),
-    )
-
     await db.insert(marketPriceTable).values(marketPriceData).returning()
 
-    // Optionally, you could also return the data directly:
     return NextResponse.json(marketPriceData)
   } catch (error) {
     console.error(error)

@@ -17,7 +17,7 @@ export default function CardPrice() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/domba')
+      const response = await fetch('/api/daging')
       const result = await response.json()
 
       if (response.ok) {
