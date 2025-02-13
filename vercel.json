@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "app/api/domba/route.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/domba",
+      "schedule": "*/1 * * * *"
+    }
+  ]
+}
