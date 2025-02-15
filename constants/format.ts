@@ -42,3 +42,18 @@ export const categoryToSatuanFormat = {
   OBAT: 'pcs',
   PEGAWAI: 'orang',
 }
+
+export function formatIDRShort(value: number): string {
+  const absValue = Math.abs(value) // Convert to positive for formatting
+  let formatted: string
+
+  if (absValue >= 1_000_000) {
+    formatted = `${(absValue / 1_000_000).toFixed(absValue % 1_000_000 === 0 ? 0 : 1)} jt`
+  } else if (absValue >= 1_000) {
+    formatted = `${(absValue / 1_000).toFixed(absValue % 1_000 === 0 ? 0 : 1)}k`
+  } else {
+    formatted = absValue.toString()
+  }
+
+  return value < 0 ? `-${formatted}` : formatted // Add minus sign if negative
+}

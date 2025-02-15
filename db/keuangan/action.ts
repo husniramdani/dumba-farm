@@ -1,5 +1,6 @@
 'use server'
 
+import { format, subMonths } from 'date-fns'
 import { asc, desc, eq, sql } from 'drizzle-orm'
 
 import { db } from '../index'
@@ -223,4 +224,44 @@ export async function getRecentSalesByPeriod(period: TPeriod) {
     totalSales: totalSalesResult[0]?.totalSales || 0,
     recentSales: recentSalesResult,
   }
+}
+
+export async function getKeuntunganOverview() {
+  // Get total keuntungan for each month in the last 12 months
+  const results = await db
+    .select({
+      monthYear: sql<string>`strftime('%Y-%m', created_at)`, // Get 'YYYY-MM'
+      totalKeuntungan: sql<number>`COALESCE(SUM(CASE WHEN type = 'INCOME' THEN amount * quantity ELSE - (amount * quantity) END), 0)`,
+    })
+    .from(keuanganTable)
+    .where(sql`created_at >= datetime('now', '-12 months')`)
+    .groupBy(sql`strftime('%Y-%m', created_at)`)
+    .orderBy(sql`strftime('%Y-%m', created_at) ASC`) // Ensure sorting is ascending (earliest month first)
+
+  // Generate last 12 months with default total 0
+  const last12Months = Array.from({ length: 12 }, (_, i) => {
+    const date = subMonths(new Date(), 11 - i) // Ensure first month is the earliest one
+    return {
+      name: format(date, 'MMM yy'), // Example: "Mar 24"
+      total: 0, // Default value
+    }
+  })
+
+  // Merge database results into last12Months array
+  const finalResults = last12Months.map((monthData) => {
+    const match = results.find(
+      (r) =>
+        r.monthYear ===
+        format(
+          subMonths(new Date(), 11 - last12Months.indexOf(monthData)),
+          'yyyy-MM',
+        ),
+    )
+    return {
+      ...monthData,
+      total: match ? match.totalKeuntungan : 0,
+    }
+  })
+
+  return finalResults
 }

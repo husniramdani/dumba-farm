@@ -31,11 +31,11 @@ export function RecentSales() {
   }
 
   return (
-    <Card className="col-span-3">
+    <Card className="col-span-5 lg:col-span-3">
       <CardHeader>
         <CardTitle>Penjualan Terakhir</CardTitle>
         <CardDescription>
-          Sudah terjual {data.totalSales} ternak dalam {period} bulan terakhir.
+          Terjual {data.totalSales} ternak dalam {period} bulan terakhir.
         </CardDescription>
       </CardHeader>
       <CardContent>
