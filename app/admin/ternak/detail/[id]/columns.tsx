@@ -49,7 +49,7 @@ export const createColumns = (
           {progress > 0 ? (
             <ArrowUp size={14} />
           ) : progress < 0 ? (
-            <ArrowDown size={16} />
+            <ArrowDown size={14} />
           ) : null}
           <span>{Math.abs(progress).toFixed(1)}%</span>
         </Badge>

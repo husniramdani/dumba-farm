@@ -1,6 +1,6 @@
 'use server'
 
-import { asc, desc, eq } from 'drizzle-orm'
+import { asc, desc, eq, sql } from 'drizzle-orm'
 
 import { createHistoryTernak } from '../history/action'
 import { historyTernakTable } from '../history/schema'
@@ -8,6 +8,7 @@ import { db } from '../index'
 import { createKeuangan } from '../keuangan/action'
 import { InsertTernak, SelectTernak, ternakTable } from './schema'
 
+import { TPeriod } from '@/services/dashboard'
 import type { PaginatedResponse } from '@/types/model'
 
 export async function createTernak(data: InsertTernak) {
@@ -170,4 +171,53 @@ export async function syncTernakWeightFromHistory(
     .returning()
 
   return updatedTernak
+}
+
+/**
+ * Dashboard function
+ *
+ * @param period - The period of the total ternak to get.
+ * @returns The total ternak record, or zero if no ternak found.
+ */
+
+export async function getTotalTernakByPeriod(period: TPeriod) {
+  // Get total for the current period
+  const currentResult = await db
+    .select({
+      totalCurrentPeriod: sql<number>`COUNT(*)`,
+    })
+    .from(ternakTable)
+    .where(sql`created_at >= datetime('now', '-' || ${period} || ' months')`)
+
+  // Get total for the previous period
+  const previousResult = await db
+    .select({
+      totalPreviousPeriod: sql<number>`COUNT(*)`,
+    })
+    .from(ternakTable)
+    .where(
+      sql`created_at BETWEEN datetime('now', '-' || (${period} * 2) || ' months')
+          AND datetime('now', '-' || ${period} || ' months')`,
+    )
+
+  const totalCurrentPeriod = currentResult[0]?.totalCurrentPeriod || 0
+  const totalPreviousPeriod = previousResult[0]?.totalPreviousPeriod || 0
+
+  // Calculate growth
+  const growth = totalCurrentPeriod - totalPreviousPeriod
+
+  // Calculate growth percentage (handle division by zero)
+  const growthPercentage =
+    totalPreviousPeriod > 0
+      ? (growth / totalPreviousPeriod) * 100
+      : totalCurrentPeriod > 0
+        ? 100
+        : 0
+
+  return {
+    totalCurrentPeriod,
+    totalPreviousPeriod,
+    growth,
+    growthPercentage,
+  }
 }
