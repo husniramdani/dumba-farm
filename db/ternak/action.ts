@@ -221,3 +221,47 @@ export async function getTotalTernakByPeriod(period: TPeriod) {
     growthPercentage,
   }
 }
+
+export async function getTotalSoldTernakByPeriod(period: TPeriod) {
+  // Get total sold for the current period
+  const currentResult = await db
+    .select({
+      totalSoldCurrentPeriod: sql<number>`COUNT(*)`,
+    })
+    .from(ternakTable)
+    .where(
+      sql`status = 'SOLD' AND created_at >= datetime('now', '-' || ${period} || ' months')`,
+    )
+
+  // Get total sold for the previous period
+  const previousResult = await db
+    .select({
+      totalSoldPreviousPeriod: sql<number>`COUNT(*)`,
+    })
+    .from(ternakTable)
+    .where(
+      sql`status = 'SOLD' AND created_at BETWEEN datetime('now', '-' || (${period} * 2) || ' months') AND datetime('now', '-' || ${period} || ' months')`,
+    )
+
+  const totalSoldCurrentPeriod = currentResult[0]?.totalSoldCurrentPeriod || 0
+  const totalSoldPreviousPeriod =
+    previousResult[0]?.totalSoldPreviousPeriod || 0
+
+  // Calculate growth
+  const growth = totalSoldCurrentPeriod - totalSoldPreviousPeriod
+
+  // Calculate growth percentage (handle division by zero)
+  const growthPercentage =
+    totalSoldPreviousPeriod > 0
+      ? (growth / totalSoldPreviousPeriod) * 100
+      : totalSoldCurrentPeriod > 0
+        ? 100
+        : 0
+
+  return {
+    totalSoldCurrentPeriod,
+    totalSoldPreviousPeriod,
+    growth,
+    growthPercentage,
+  }
+}

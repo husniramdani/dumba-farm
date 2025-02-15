@@ -1,5 +1,5 @@
 import CardExpense from './CardExpense'
-import CardProfit from './CardProfit'
+import CardIncome from './CardIncome'
 import CardSelling from './CardSelling'
 import CardTernak from './CardTernak'
 import SelectPeriod from './SelectPeriod'
@@ -24,7 +24,7 @@ export default function Page() {
           <SelectPeriod />
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <CardProfit />
+          <CardIncome />
           <CardExpense />
           <CardTernak />
           <CardSelling />

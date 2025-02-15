@@ -37,6 +37,7 @@ export function useCreateTernak() {
     mutationFn: (data: FormSchemaType) => createTernak(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Ternak berhasil ditambahkan')
     },
     onError: (error) => {
@@ -55,6 +56,7 @@ export function useUpdateTernak(id: number) {
     ) => updateTernak(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Ternak berhasil diperbarui')
     },
     onError: (error) => {
@@ -71,6 +73,7 @@ export function useDeleteTernak() {
     mutationFn: (ternakId: number) => deleteTernak(ternakId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Ternak berhasil dihapus')
     },
     onError: (error) => {
@@ -88,6 +91,7 @@ export function useJualTernak() {
       jualTernak(id, price),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Ternak berhasil dijual')
     },
     onError: (error) => {

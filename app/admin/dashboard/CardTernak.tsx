@@ -3,9 +3,9 @@
 import { ArrowDown, ArrowUp, Vegan } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 
+import LoadingCardSmall from '@/components/loading/cardSmall'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 import { TPeriod, useTotalTernak } from '@/services/dashboard'
 
 export default function CardTernak() {
@@ -14,15 +14,7 @@ export default function CardTernak() {
 
   const { data, isLoading } = useTotalTernak(period)
 
-  if (isLoading) {
-    return (
-      <Card className="space-y-2 p-2">
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-8 w-full" />
-      </Card>
-    )
-  }
+  if (isLoading) return <LoadingCardSmall />
 
   if (!data) return <div>Data not found!</div>
 

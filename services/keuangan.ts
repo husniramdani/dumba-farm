@@ -34,6 +34,7 @@ export function useCreateKeuangan() {
     mutationFn: (data: FormSchemaType) => createKeuangan(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Transaksi berhasil ditambahkan')
     },
     onError: (error) => {
@@ -52,6 +53,7 @@ export function useUpdateKeuangan(id: number) {
     ) => updateKeuangan(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Transaksi berhasil diperbarui')
     },
     onError: (error) => {
@@ -68,6 +70,7 @@ export function useDeleteKeuangan() {
     mutationFn: (id: number) => deleteKeuangan(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Transaksi berhasil dihapus')
     },
     onError: (error) => {

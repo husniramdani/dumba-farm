@@ -1,35 +1,35 @@
 'use client'
 
-import { Activity, ArrowDown, ArrowUp } from 'lucide-react'
+import { ArrowDown, ArrowUp, DollarSign } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 
 import LoadingCardSmall from '@/components/loading/cardSmall'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { currencyIDR } from '@/constants/format'
-import { TPeriod, useTotalExpense } from '@/services/dashboard'
+import { TPeriod, useTotalKeuntungan } from '@/services/dashboard'
 
-export default function CardExpense() {
+export default function CardIncome() {
   const searchParams = useSearchParams()
   const period: TPeriod = (Number(searchParams.get('period')) as TPeriod) || 1
 
-  const { data, isLoading } = useTotalExpense(period)
+  const { data, isLoading } = useTotalKeuntungan(period)
 
   if (isLoading) return <LoadingCardSmall />
 
   if (!data) return <div>Data not found!</div>
 
-  const { totalExpenseCurrentPeriod, growthPercentage } = data
+  const { totalKeuntunganCurrentPeriod, growthPercentage } = data
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Pengeluaran</CardTitle>
-        <Activity size={16} />
+        <CardTitle className="text-sm font-medium">Penghasilan</CardTitle>
+        <DollarSign size={16} />
       </CardHeader>
       <CardContent className="space-y-1">
         <div className="text-2xl font-bold">
-          {currencyIDR.format(totalExpenseCurrentPeriod)}
+          {currencyIDR.format(totalKeuntunganCurrentPeriod)}
         </div>
         <div className="space-x-1 flex items-center">
           <Badge variant={growthPercentage >= 0 ? 'solidGreen' : 'solidRed'}>
