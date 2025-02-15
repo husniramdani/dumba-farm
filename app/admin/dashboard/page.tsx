@@ -6,6 +6,8 @@ import { ChartOverview } from './ChartOverview'
 import { RecentSales } from './RecentSales'
 import SelectPeriod from './SelectPeriod'
 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
 export default function Page() {
   return (
     <div className="flex flex-col">
@@ -22,7 +24,14 @@ export default function Page() {
           <CardSelling />
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-8">
-          <ChartOverview />
+          <Card className="col-span-5">
+            <CardHeader>
+              <CardTitle>Overview</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4">
+              <ChartOverview />
+            </CardContent>
+          </Card>
           <RecentSales />
         </div>
       </div>
