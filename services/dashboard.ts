@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import {
+  getRecentSalesByPeriod,
   getTotalExpenseByPeriod,
   getTotalKeuntunganByPeriod,
 } from '@/db/keuangan/action'
@@ -38,5 +39,12 @@ export function useTotalKeuntungan(period: TPeriod = 1) {
   return useQuery({
     queryKey: [QUERY_KEY, 'totalKeuntungan', period],
     queryFn: () => getTotalKeuntunganByPeriod(period),
+  })
+}
+
+export function useRecentSales(period: TPeriod = 1) {
+  return useQuery({
+    queryKey: [QUERY_KEY, 'recentSales', period],
+    queryFn: () => getRecentSalesByPeriod(period),
   })
 }

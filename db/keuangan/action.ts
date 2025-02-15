@@ -191,3 +191,36 @@ export async function getTotalKeuntunganByPeriod(period: TPeriod) {
     growthPercentage,
   }
 }
+
+export async function getRecentSalesByPeriod(period: TPeriod) {
+  // Get total sales count for the selected period
+  const totalSalesResult = await db
+    .select({
+      totalSales: sql<number>`COUNT(*)`,
+    })
+    .from(keuanganTable)
+    .where(
+      sql`type = 'INCOME' AND created_at >= datetime('now', '-' || ${period} || ' months')`,
+    )
+
+  // Get the 5 most recent sales transactions
+  const recentSalesResult = await db
+    .select({
+      ternakId: keuanganTable.ternakId,
+      quantity: keuanganTable.quantity,
+      amount: keuanganTable.amount,
+      total: sql<number>`(quantity * amount)`,
+      date: keuanganTable.createdAt,
+    })
+    .from(keuanganTable)
+    .where(
+      sql`type = 'INCOME' AND created_at >= datetime('now', '-' || ${period} || ' months')`,
+    )
+    .orderBy(sql`created_at DESC`)
+    .limit(5)
+
+  return {
+    totalSales: totalSalesResult[0]?.totalSales || 0,
+    recentSales: recentSalesResult,
+  }
+}

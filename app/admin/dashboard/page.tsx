@@ -2,17 +2,11 @@ import CardExpense from './CardExpense'
 import CardIncome from './CardIncome'
 import CardSelling from './CardSelling'
 import CardTernak from './CardTernak'
+import { RecentSales } from './RecentSales'
 import SelectPeriod from './SelectPeriod'
 
 import { Overview } from '@/components/dashboard/overview'
-import { RecentSales } from '@/components/dashboard/recent-sales'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function Page() {
   return (
@@ -38,15 +32,7 @@ export default function Page() {
               <Overview />
             </CardContent>
           </Card>
-          <Card className="col-span-3">
-            <CardHeader>
-              <CardTitle>Recent Sales</CardTitle>
-              <CardDescription>You made 265 sales this month.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RecentSales />
-            </CardContent>
-          </Card>
+          <RecentSales />
         </div>
       </div>
     </div>
