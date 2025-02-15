@@ -32,7 +32,7 @@ export default function SelectPeriod() {
 
   return (
     <Select onValueChange={handleChange} defaultValue={currentPeriod}>
-      <SelectTrigger className="w-[200px]">
+      <SelectTrigger className="w-[130px]">
         <SelectValue placeholder="Pilih Periode" />
       </SelectTrigger>
       <SelectContent>
