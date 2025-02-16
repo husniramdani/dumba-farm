@@ -31,6 +31,8 @@ import { useDeleteTernak } from '@/services/ternak'
 export const MenuActions = ({ row }: { row: Row<SelectTernak> }) => {
   const ternakId = row.original.id
   const status = row.original.status
+  const weight = row.original.weight
+  const buyPrice = row.original.buyPrice
 
   const [showDeleteAlert, setShowDeleteAlert] = useState(false)
   const [showJualAlert, setShowJualAlert] = useState(false)
@@ -88,6 +90,8 @@ export const MenuActions = ({ row }: { row: Row<SelectTernak> }) => {
         ternakId={ternakId}
         showJualAlert={showJualAlert}
         setShowJualAlert={setShowJualAlert}
+        weight={weight}
+        buyPrice={buyPrice}
       />
 
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>

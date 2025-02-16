@@ -144,6 +144,8 @@ export default function Page({ params }: { params: { id: string } }) {
         ternakId={params.id}
         showJualAlert={showJualAlert}
         setShowJualAlert={setShowJualAlert}
+        weight={weight}
+        buyPrice={buyPrice}
       />
     </div>
   )

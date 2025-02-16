@@ -79,18 +79,6 @@ export async function updateTernak(
     .where(eq(ternakTable.id, id))
     .returning()
 
-  // current price dari hasil crawl terakhir
-  // const currentPrice = 50000
-  // create pengeluaran
-  // if (updated.status === 'SOLD') {
-  //   createKeuangan({
-  //     ternakId: id,
-  //     type: 'INCOME',
-  //     category: 'TERNAK',
-  //     amount: updated.weight * currentPrice,
-  //   })
-  // }
-
   return updated
 }
 
@@ -109,14 +97,12 @@ export async function jualTernak(id: SelectTernak['id'], price?: number) {
     .where(eq(ternakTable.id, id))
     .returning()
 
-  // current price dari hasil crawl terakhir
-  const currentPrice = 50000
   // create pengeluaran
   createKeuangan({
     ternakId: id,
     type: 'INCOME',
     category: 'TERNAK',
-    amount: price || currentPrice,
+    amount: price || ternak.buyPrice,
     quantity: ternak.weight,
   })
 
