@@ -32,7 +32,6 @@ export async function getAllMarketPrice({
     .where(eq(marketPriceTable.type, marketType))
     .execute()
 
-  console.log(totalCountResult)
   const totalCount = totalCountResult[0]?.count ?? 0
   const totalPages = Math.ceil(totalCount / limit)
 

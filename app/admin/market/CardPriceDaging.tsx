@@ -4,6 +4,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { RefreshCcw } from 'lucide-react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -26,6 +27,7 @@ export default function CardPriceDaging() {
     try {
       await axios.get('/api/daging')
       await refetch()
+      toast.success('Harga terbaru berhasil discrapping')
     } catch (err) {
       console.error('Error scraping market price:', err)
     } finally {
