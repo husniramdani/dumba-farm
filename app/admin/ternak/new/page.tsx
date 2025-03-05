@@ -115,6 +115,21 @@ export default function Page() {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nama Ternak</FormLabel>
+                <FormControl>
+                  <Input placeholder="Masukkan nama ternak" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="weight"

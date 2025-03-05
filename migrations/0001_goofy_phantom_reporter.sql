@@ -1,0 +1,1 @@
+ALTER TABLE `ternak` ADD `name` text DEFAULT '' NOT NULL;

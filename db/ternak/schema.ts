@@ -9,6 +9,7 @@ import { BREED, GENDER, STATUS } from '@/constants/enum'
 export const ternakTable = sqliteTable('ternak', {
   id: integer('id', { mode: 'number' }).primaryKey({ autoIncrement: true }),
   gender: text('gender', { enum: GENDER }).default('FEMALE').notNull(),
+  name: text('name').notNull().default(''),
   buyPrice: real('buy_price').notNull(),
   weight: integer('weight', { mode: 'number' }).notNull().default(0),
   age: integer('age', { mode: 'number' }).notNull(),
@@ -30,6 +31,7 @@ export type SelectTernak = typeof ternakTable.$inferSelect
 
 export const formSchema = z
   .object({
+    name: z.string().optional(),
     gender: z.enum(GENDER).default('FEMALE'),
     imageUrl: z.string().optional(),
     weight: z.coerce.number().refine((val) => val > 0, {
@@ -49,6 +51,7 @@ export const formSchema = z
 export type FormSchemaType = z.infer<typeof formSchema>
 
 export const defaultValues: FormSchemaType = {
+  name: '',
   gender: 'FEMALE',
   imageUrl:
     'http://res.cloudinary.com/deyycthuk/image/upload/v1741196926/dkkcywsfrumon3ecotha.webp',
