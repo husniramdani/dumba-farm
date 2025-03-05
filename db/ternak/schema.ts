@@ -30,6 +30,7 @@ export type SelectTernak = typeof ternakTable.$inferSelect
 export const formSchema = z
   .object({
     gender: z.enum(GENDER).default('FEMALE'),
+    imageUrl: z.string().optional(),
     weight: z.coerce.number().refine((val) => val > 0, {
       message: 'Berat harus diisi',
     }),
@@ -48,6 +49,7 @@ export type FormSchemaType = z.infer<typeof formSchema>
 
 export const defaultValues: FormSchemaType = {
   gender: 'FEMALE',
+  imageUrl: '',
   buyPrice: 0,
   weight: 0,
   age: 0,

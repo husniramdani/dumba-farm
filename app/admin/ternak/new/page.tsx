@@ -13,6 +13,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
+import SingleImageUpload from '@/components/ui/file-upload'
 import {
   Form,
   FormControl,
@@ -94,6 +95,21 @@ export default function Page() {
                       <FormLabel className="cursor-pointer">Betina</FormLabel>
                     </FormItem>
                   </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Foto Ternak</FormLabel>
+                <FormControl>
+                  <SingleImageUpload
+                    onUploadComplete={(url) => field.onChange(url)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
