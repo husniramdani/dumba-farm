@@ -14,12 +14,77 @@ const ImageColor = {
   fillColor: 'fill-purple-600',
 }
 
+// Function to generate Cloudinary signature
+const generateSignature = async (paramsToSign: Record<string, number>) => {
+  try {
+    const response = await fetch('/api/cloudinary/signature', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(paramsToSign),
+    })
+
+    const data = await response.json()
+    return data.signature
+  } catch (error) {
+    console.error('Error generating signature:', error)
+    throw error
+  }
+}
+
 export default function SingleImageUpload({
   onUploadComplete,
 }: FileUploadProps) {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
+
+  const uploadToCloudinary = async (file: File) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const timestamp = Math.round(new Date().getTime() / 1000)
+        const paramsToSign = { timestamp }
+        const signature = await generateSignature(paramsToSign)
+
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('api_key', process.env.NEXT_PUBLIC_API_KEY!)
+        formData.append('timestamp', timestamp.toString())
+        formData.append('signature', signature)
+
+        const xhr = new XMLHttpRequest()
+        xhr.open(
+          'POST',
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          true,
+        )
+
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const progress = Math.round((e.loaded / e.total) * 100)
+            setUploadProgress(progress)
+          }
+        }
+
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText)
+            const url = response.secure_url
+            resolve(url)
+          } else {
+            reject(new Error('Upload failed'))
+          }
+        }
+
+        xhr.onerror = () => {
+          reject(new Error('Upload failed'))
+        }
+
+        xhr.send(formData)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -35,50 +100,12 @@ export default function SingleImageUpload({
         return
       }
 
-      // Simulate progress update
       setUploadedFile(file)
       setUploadProgress(0)
 
       try {
-        const timestamp = Math.round(new Date().getTime() / 1000)
-        const paramsToSign = { timestamp }
-
-        // Get Cloudinary signature
-        const signatureResponse = await fetch('/api/cloudinary/signature', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(paramsToSign),
-        })
-
-        const { signature } = await signatureResponse.json()
-        if (!signature) {
-          throw new Error('Failed to generate Cloudinary signature.')
-        }
-
-        // Upload to Cloudinary
-        const formData = new FormData()
-        formData.append('file', file)
-        formData.append('api_key', process.env.NEXT_PUBLIC_API_KEY!)
-        formData.append('timestamp', timestamp.toString())
-        formData.append('signature', signature)
-
-        const uploadResponse = await fetch(
-          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-          {
-            method: 'POST',
-            body: formData,
-          },
-        )
-
-        if (!uploadResponse.ok) {
-          throw new Error('Upload failed.')
-        }
-
-        const uploadResult = await uploadResponse.json()
-        const imageUrl = uploadResult.secure_url
-
-        setUploadedFile(file) // Store single file
-        setUploadedUrl(imageUrl) // Store single URL
+        const imageUrl = (await uploadToCloudinary(file)) as string
+        setUploadedUrl(imageUrl)
 
         if (onUploadComplete) {
           onUploadComplete(imageUrl)
