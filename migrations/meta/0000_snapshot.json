@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c0a40c29-7ebe-464d-a5f0-f05b817027a5",
+  "id": "f591c004-dbdc-4431-b182-5d411ed4949e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "history_ternak": {
@@ -110,6 +110,14 @@
           "notNull": true,
           "autoincrement": false
         },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
         "description": {
           "name": "description",
           "type": "text",
@@ -173,6 +181,13 @@
         },
         "source": {
           "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -255,6 +270,14 @@
           "notNull": true,
           "autoincrement": false,
           "default": "'AVAILABLE'"
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
         },
         "created_at": {
           "name": "created_at",

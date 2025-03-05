@@ -14,6 +14,7 @@ export const ternakTable = sqliteTable('ternak', {
   age: integer('age', { mode: 'number' }).notNull(),
   breed: text('breed', { enum: BREED }).notNull(),
   status: text('status', { enum: STATUS }).default('AVAILABLE').notNull(),
+  imageUrl: text('image_url').notNull().default(''),
   createdAt: text('created_at')
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
@@ -49,7 +50,8 @@ export type FormSchemaType = z.infer<typeof formSchema>
 
 export const defaultValues: FormSchemaType = {
   gender: 'FEMALE',
-  imageUrl: '',
+  imageUrl:
+    'http://res.cloudinary.com/deyycthuk/image/upload/v1741196926/dkkcywsfrumon3ecotha.webp',
   buyPrice: 0,
   weight: 0,
   age: 0,

@@ -14,6 +14,7 @@ CREATE TABLE `keuangan` (
 	`type` text NOT NULL,
 	`category` text NOT NULL,
 	`amount` real NOT NULL,
+	`quantity` integer DEFAULT 0 NOT NULL,
 	`description` text,
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updated_at` text DEFAULT (CURRENT_TIMESTAMP),
@@ -24,6 +25,7 @@ CREATE TABLE `market_price` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`price` real NOT NULL,
 	`source` text NOT NULL,
+	`type` text NOT NULL,
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updated_at` text DEFAULT (CURRENT_TIMESTAMP)
 );
@@ -36,6 +38,7 @@ CREATE TABLE `ternak` (
 	`age` integer NOT NULL,
 	`breed` text NOT NULL,
 	`status` text DEFAULT 'AVAILABLE' NOT NULL,
+	`image_url` text DEFAULT '' NOT NULL,
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updated_at` text DEFAULT (CURRENT_TIMESTAMP)
 );
