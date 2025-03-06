@@ -2,9 +2,9 @@ import { v2 as cloudinary } from 'cloudinary'
 import { NextResponse } from 'next/server'
 
 cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.NEXT_PUBLIC_API_KEY,
-  api_secret: process.env.NEXT_PUBLIC_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 })
 
 export async function POST(request: Request) {
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     // Generate signature
     const signature = cloudinary.utils.api_sign_request(
       { timestamp, ...restParams },
-      process.env.NEXT_PUBLIC_API_SECRET!,
+      process.env.API_SECRET!,
     )
 
     return NextResponse.json({ signature })

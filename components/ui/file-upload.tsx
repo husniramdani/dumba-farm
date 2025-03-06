@@ -47,14 +47,14 @@ export default function SingleImageUpload({
 
         const formData = new FormData()
         formData.append('file', file)
-        formData.append('api_key', process.env.NEXT_PUBLIC_API_KEY!)
+        formData.append('api_key', process.env.API_KEY!)
         formData.append('timestamp', timestamp.toString())
         formData.append('signature', signature)
 
         const xhr = new XMLHttpRequest()
         xhr.open(
           'POST',
-          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
           true,
         )
 
