@@ -120,7 +120,10 @@ export default function Page({ params }: { params: { id: string } }) {
               <FormItem>
                 <FormLabel>Foto Ternak</FormLabel>
                 <FormControl>
-                  <FileUpload onUploadComplete={(url) => field.onChange(url)} />
+                  <FileUpload
+                    defaultValue={field.value}
+                    onUploadComplete={(url) => field.onChange(url)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -21,6 +21,16 @@ export const createColumns = (
     cell: ({ row }) => <div>{row.index + 1 + (page - 1) * limit}</div>,
   },
   {
+    accessorKey: 'name',
+    header: () => <div>Nama</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {String(row.getValue('name')).toLowerCase()}
+      </div>
+    ),
+  },
+
+  {
     accessorKey: 'breed',
     header: () => <div>Jenis</div>,
     cell: ({ row }) => (

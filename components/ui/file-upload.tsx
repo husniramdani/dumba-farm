@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FileImage, Trash, UploadCloud } from 'lucide-react'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import ProgressBar from './progress-bar'
 
 interface FileUploadProps {
+  defaultValue?: string
   onUploadComplete?: (url: string) => void
 }
 
@@ -32,12 +33,17 @@ const generateSignature = async (paramsToSign: Record<string, number>) => {
   }
 }
 
-export default function SingleImageUpload({
+export default function FileUpload({
+  defaultValue,
   onUploadComplete,
 }: FileUploadProps) {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (defaultValue) setUploadedUrl(defaultValue)
+  }, [defaultValue])
 
   const uploadToCloudinary = async (file: File) => {
     return new Promise(async (resolve, reject) => {
@@ -135,7 +141,7 @@ export default function SingleImageUpload({
 
   return (
     <div className="flex flex-col items-center gap-4 p-4 border border-gray-300 rounded-lg">
-      {!uploadedFile ? (
+      {!uploadedFile && !uploadedUrl ? (
         <div
           {...getRootProps()}
           className="w-full p-6 border-2 border-dashed border-gray-400 flex flex-col items-center justify-center cursor-pointer hover:border-gray-600 transition"
