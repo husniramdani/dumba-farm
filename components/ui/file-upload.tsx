@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { FileImage, Trash, UploadCloud } from 'lucide-react'
+import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'sonner'
 
@@ -10,8 +11,8 @@ interface FileUploadProps {
 }
 
 const ImageColor = {
-  bgColor: 'bg-purple-600',
-  fillColor: 'fill-purple-600',
+  bgColor: 'bg-blue-500',
+  fillColor: 'fill-blue-500',
 }
 
 // Function to generate Cloudinary signature
@@ -150,7 +151,7 @@ export default function SingleImageUpload({
           <div className="flex items-center gap-4">
             <FileImage className={`w-10 h-10 ${ImageColor.fillColor}`} />
             <div className="flex-1">
-              <p className="text-sm font-medium">{uploadedFile.name}</p>
+              <p className="text-sm font-medium">{uploadedFile?.name || '-'}</p>
               <ProgressBar progress={uploadProgress} />
             </div>
             <button
@@ -161,11 +162,14 @@ export default function SingleImageUpload({
             </button>
           </div>
           {uploadedUrl && (
-            <img
-              src={uploadedUrl}
-              alt="Uploaded"
-              className="mt-4 w-full rounded-lg"
-            />
+            <div className="relative w-full min-h-[320px]">
+              <Image
+                src={uploadedUrl}
+                className="my-4 w-full rounded-lg object-cover"
+                alt="Uploaded"
+                fill
+              />
+            </div>
           )}
         </div>
       )}

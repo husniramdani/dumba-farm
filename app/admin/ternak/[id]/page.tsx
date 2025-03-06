@@ -14,6 +14,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
+import FileUpload from '@/components/ui/file-upload'
 import {
   Form,
   FormControl,
@@ -111,6 +112,35 @@ export default function Page({ params }: { params: { id: string } }) {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Foto Ternak</FormLabel>
+                <FormControl>
+                  <FileUpload onUploadComplete={(url) => field.onChange(url)} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nama Ternak</FormLabel>
+                <FormControl>
+                  <Input placeholder="Masukkan nama ternak" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* <FormField */}
           {/*   control={form.control} */}
           {/*   name="weight" */}
