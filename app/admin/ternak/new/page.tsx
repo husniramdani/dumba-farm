@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -23,6 +24,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import MoneyInput from '@/components/ui/money-input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
@@ -43,9 +45,21 @@ export default function Page() {
   })
 
   const { mutate, isPending } = useCreateTernak()
+  const [unit, setUnit] = useState('kg')
 
   function onSubmit(values: FormSchemaType) {
-    mutate(values, {
+    let finalPrice = values.buyPrice
+
+    if (unit === 'ekor' && values.weight > 0) {
+      finalPrice = values.buyPrice / values.weight
+    }
+
+    const submitData = {
+      ...values,
+      buyPrice: finalPrice,
+    }
+
+    mutate(submitData, {
       onSuccess: () => {
         router.push('/admin/ternak')
       },
@@ -135,11 +149,11 @@ export default function Page() {
             name="weight"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Berat dalam kilogram</FormLabel>
+                <FormLabel>Berat Domba (kg)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Berat dalam kilogram"
                     type="number"
+                    placeholder="Berat dalam kilogram"
                     {...field}
                   />
                 </FormControl>
@@ -165,12 +179,31 @@ export default function Page() {
               </FormItem>
             )}
           />
-          <MoneyInput
-            form={form}
-            name="buyPrice"
-            label="Harga beli per kilogram"
-            placeholder="Masukkan harga beli"
-          />
+          <div className="flex gap-1">
+            <div className="w-full">
+              <div className="flex items-center gap-3">
+                <Label>Harga Beli</Label>
+                <Select
+                  onValueChange={(value) => setUnit(value)}
+                  defaultValue="kg"
+                >
+                  <SelectTrigger className="w-[125px] h-8">
+                    <SelectValue placeholder="pilih satuan" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="kg">per kilogram</SelectItem>
+                    <SelectItem value="ekor">per ekor</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <MoneyInput
+                form={form}
+                name="buyPrice"
+                label=""
+                placeholder="Masukkan harga beli"
+              />
+            </div>
+          </div>
           <FormField
             control={form.control}
             name="breed"

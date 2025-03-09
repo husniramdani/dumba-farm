@@ -51,7 +51,7 @@ export const formSchema = z
 export type FormSchemaType = z.infer<typeof formSchema>
 
 export const defaultValues: FormSchemaType = {
-  name: '',
+  name: 'X-1',
   gender: 'FEMALE',
   imageUrl:
     'http://res.cloudinary.com/deyycthuk/image/upload/v1741196926/dkkcywsfrumon3ecotha.webp',

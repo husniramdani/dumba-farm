@@ -112,7 +112,6 @@ export default function Page({ params }: { params: { id: string } }) {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="imageUrl"
@@ -129,7 +128,6 @@ export default function Page({ params }: { params: { id: string } }) {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="name"
@@ -143,7 +141,6 @@ export default function Page({ params }: { params: { id: string } }) {
               </FormItem>
             )}
           />
-
           {/* <FormField */}
           {/*   control={form.control} */}
           {/*   name="weight" */}
@@ -151,7 +148,7 @@ export default function Page({ params }: { params: { id: string } }) {
           {/*     <FormItem> */}
           {/*       <FormLabel>Berat dalam kilogram</FormLabel> */}
           {/*       <FormControl> */}
-          {/*         <Input */}
+          {/*         <Input */}{' '}
           {/*           placeholder="Berat dalam kilogram" */}
           {/*           type="number" */}
           {/*           {...field} */}
@@ -161,7 +158,6 @@ export default function Page({ params }: { params: { id: string } }) {
           {/*     </FormItem> */}
           {/*   )} */}
           {/* /> */}
-
           <FormField
             control={form.control}
             name="age"
