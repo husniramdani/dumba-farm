@@ -27,6 +27,7 @@ export function useTernakDetail(id: number) {
   return useQuery({
     queryKey: [QUERY_KEY, id],
     queryFn: () => getTernakById(id),
+    enabled: !!id,
   })
 }
 

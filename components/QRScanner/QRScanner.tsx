@@ -1,15 +1,15 @@
 'use client'
 
-import { useState } from 'react'
 import jsQR from 'jsqr'
 
 import WebcamCapture from './WebcamCapture'
 
-const QRScanner = () => {
-  const [qrCode, setQrCode] = useState<string | null>(null) // Instead of `any`
-
+const QRScanner = ({
+  onScanQRCode,
+}: {
+  onScanQRCode: (id: string) => void
+}) => {
   const handleScan = (imageSrc: string) => {
-    // Explicitly define `imageSrc` type
     if (!imageSrc) return
 
     const image = new Image()
@@ -38,8 +38,8 @@ const QRScanner = () => {
       })
 
       if (code) {
-        setQrCode(code.data)
-        console.log('QR Code:', code.data)
+        const lastSegment = code.data.split('/').pop() ?? ''
+        onScanQRCode(lastSegment)
       }
     }
   }
@@ -47,7 +47,6 @@ const QRScanner = () => {
   return (
     <div>
       <WebcamCapture onScan={handleScan} />
-      {qrCode || ''}
     </div>
   )
 }

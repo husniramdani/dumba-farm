@@ -21,9 +21,14 @@ export default function Page() {
     <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Ternak</h1>
-        <Link href="/admin/ternak/new">
-          <Button>Tambah +</Button>
-        </Link>
+        <div className="space-x-5">
+          <Link href="/admin/camera">
+            <Button>Batch Sell</Button>
+          </Link>
+          <Link href="/admin/ternak/new">
+            <Button>Tambah +</Button>
+          </Link>
+        </div>
       </div>
       <DataTable
         columns={columns}

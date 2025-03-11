@@ -39,6 +39,14 @@ export async function getTernakById(
     .select()
     .from(ternakTable)
     .where(eq(ternakTable.id, id))
+
+  if (ternak) {
+    return {
+      ...ternak,
+      buyPrice: Math.round(ternak.buyPrice),
+    }
+  }
+
   return ternak
 }
 
