@@ -21,6 +21,13 @@ export async function getKeuanganById(
     .select()
     .from(keuanganTable)
     .where(eq(keuanganTable.id, id))
+
+  if (keuangan) {
+    return {
+      ...keuangan,
+      amount: Math.round(keuangan.amount),
+    }
+  }
   return keuangan
 }
 
