@@ -223,6 +223,7 @@ export default function Page() {
                     <SelectItem value="GARUT">Garut</SelectItem>
                     <SelectItem value="LOKAL">Lokal</SelectItem>
                     <SelectItem value="PRIANGAN">Priangan</SelectItem>
+                    <SelectItem value="DORPER">Dorper</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
