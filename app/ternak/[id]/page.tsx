@@ -1,19 +1,19 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useUser } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { History } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { currencyIDR, genderFormat, statusFormat } from '@/constants/format'
 import { defaultValues, formSchema, FormSchemaType } from '@/db/ternak/schema'
 import { convertMonthsToYearsAndMonths } from '@/lib/utils'
-import { useTernakDetail } from '@/services/ternak'
 import { useHistoryTernak } from '@/services/historyTernak'
+import { useTernakDetail } from '@/services/ternak'
 
 export default function Page({ params }: { params: { id: string } }) {
   const { user } = useUser()
@@ -24,10 +24,10 @@ export default function Page({ params }: { params: { id: string } }) {
   })
 
   const { data, isLoading } = useTernakDetail(Number(params.id))
-  const { data: historyData, isLoading: isHistoryLoading } = useHistoryTernak({ 
-    page: 1, 
-    limit: 10, 
-    ternakId: Number(params.id)
+  const { data: historyData, isLoading: isHistoryLoading } = useHistoryTernak({
+    page: 1,
+    limit: 10,
+    ternakId: Number(params.id),
   })
 
   useEffect(() => {
@@ -140,4 +140,5 @@ const FieldValue: React.FC<FieldValueProps> = ({ value }) => {
       {value}
     </div>
   )
-} 
+}
+
