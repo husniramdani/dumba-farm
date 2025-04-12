@@ -7,6 +7,7 @@ import LoadingCardSmall from '@/components/loading/cardSmall'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { currencyIDR } from '@/constants/format'
+import { cn } from '@/lib/utils'
 import { TPeriod, useTotalExpense } from '@/services/dashboard'
 
 export default function CardExpense() {
@@ -23,7 +24,13 @@ export default function CardExpense() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader
+        className={cn(
+          'flex flex-row items-center justify-between space-y-0 pb-2',
+          'sm:text-sm',
+          'md:text-md',
+        )}
+      >
         <CardTitle className="text-sm font-medium">Pengeluaran</CardTitle>
         <Activity size={16} />
       </CardHeader>
