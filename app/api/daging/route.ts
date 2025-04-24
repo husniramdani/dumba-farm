@@ -42,6 +42,7 @@ export async function GET() {
       price,
       source: 'Simponi Ternak',
       type: 'DAGING',
+      createdAt: new Date().toISOString()
     }
 
     await db.insert(marketPriceTable).values(marketPriceData).returning()

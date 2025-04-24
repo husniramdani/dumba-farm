@@ -54,6 +54,7 @@ export async function GET() {
       price: targetPrice,
       source: 'Taniku - Domba ekor kurus',
       type: 'DOMBA',
+      createdAt: new Date().toISOString()
     }
 
     await db.insert(marketPriceTable).values(marketPriceData).returning()
